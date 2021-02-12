@@ -13,15 +13,17 @@ module instruction_memory(clk, reset, address, instruction);
 	logic instruction_memory[`NUMBER_OF_INSTRUCTIONS - 1:0][31:0];
 
 	// initialize binary memory file
+	$display("Loading instruction memory...");
 	initial $readmemb("rv32i-instruction.bin", instruction_memory);
 
 
 	// dff
 	always_ff@(posedge clk) begin
 		if (reset) begin
-			
+			// set instruction to all 0
+			instruction <= 32'b0;
 		end else begin
-			instruction <= 
+			instruction <= instruction_memory[address];
 		end
 	end
 endmodule
