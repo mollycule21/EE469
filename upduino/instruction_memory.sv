@@ -5,9 +5,12 @@
 `define NUMBER_OF_INSTRUCTIONS	64
 
 module instruction_memory(clk, reset, address, instruction);
+	localparam address_size;
+	assign address_size = $clog2(`NUMBER_OF_INSTRUCTIONS);
+
 	input logic 	clk;
-	input logic 	[31:0]address;			// 4-byte address pointer
-	output logic 	[31:0]instruction;		// 4-byte instruction
+	input logic 	[address_size - 1:0]address;
+	output logic 	[31:0]instruction;				// 4-byte instruction
 	
 	// instruction memeory
 	logic instruction_memory[`NUMBER_OF_INSTRUCTIONS - 1:0][31:0];
