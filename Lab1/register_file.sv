@@ -12,13 +12,27 @@ module register_file (input logic [4:0] read_reg_1, read_reg_2, wr_reg,
 						input clk,  
 						output logic [31:0] read_out_1, read_out_2);
 	
-	//need to implement register? 
-	// logic [31:0] [31:0] regsiter 
-	logic [31:0] register [31:0] ;
+	// initalize regfile 
+	logic[31:0] register [31:0];
 	
-	assign register[2] = 32'd20;
-	assign register[4] = 32'd40; 
-	assign register[8] = 32'd80; 
+	// genvar i; 
+	// generate 
+	initial begin 
+		for (int i = 0; i < 32; i = i + 1) begin 
+				//hardcode for testing purposes 
+				if (i == 2) begin
+					register[i] = 32'd20;
+				end 
+				 else if (i == 4) begin 
+					register[i] = 32'd40;
+				end 
+				else begin 
+					register[i] = 32'd0;
+				end 
+		end 
+	end 
+	// endgenerate 
+
 
 	assign read_out_1 = register[read_reg_1];
 	assign read_out_2 = register[read_reg_2];
@@ -31,6 +45,7 @@ module register_file (input logic [4:0] read_reg_1, read_reg_2, wr_reg,
 
 endmodule 
 
+// Correct - cofirmed on modelsim 
 module register_file_testbench();
 	logic [4:0] read_reg_1, read_reg_2, wr_reg;
 	logic [31:0] wr_data;  
@@ -61,7 +76,7 @@ module register_file_testbench();
 		wr_data <= 32'd16; 
 		repeat(3) @(posedge clk);
 		wr_en <= 1; 
-		repeat(3) @(posedge clk); //read_out_1, read_out_2; 
+		repeat(3) @(posedge clk); // read_out_1 = 20, read_out_2 = 40 (outputs), register[8] = 16
 
 	 $stop; // End the simulation.
 	 end
