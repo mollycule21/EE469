@@ -2,7 +2,7 @@
 
 # This bash script is used to generate a memory file to test instruction memory
 INSTRUCTION_SIZE=32
-NUMBER_OF_INSTRUCTIONS=64
+NUMBER_OF_INSTRUCTIONS=1024
 
 # first remove the previous file
 rm rv32i-instruction.txt
