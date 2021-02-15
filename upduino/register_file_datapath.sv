@@ -16,15 +16,15 @@ module register_file_datapath(instruction, rs1, rs2, rd);
 	// assign register[0] = 32'b0;
 	
 	// 7-bit op code values
-	logic  [6:0]op 		= 7'b0110011;
-	logic  [6:0]op_imm 	= 7'b0010011; 
-	logic  [6:0]branch 	= 7'b1100011;
-	logic  [6:0]lui		= 7'b0110111;
-	logic  [6:0]auipc	= 7'b0010111;
-	logic  [6:0]jal		= 7'b1101111;
-	logic  [6:0]jalr	= 7'b1100111;
-	logic  [6:0]load	= 7'b0000011;
-	logic  [6:0]store	= 7'b0100011;
+	localparam  [6:0]op 		= 7'b0110011;
+	localparam  [6:0]op_imm 	= 7'b0010011; 
+	localparam  [6:0]branch 	= 7'b1100011;
+	localparam  [6:0]lui		= 7'b0110111;
+	localparam  [6:0]auipc		= 7'b0010111;
+	localparam  [6:0]jal		= 7'b1101111;
+	localparam  [6:0]jalr		= 7'b1100111;
+	localparam  [6:0]load		= 7'b0000011;
+	localparam  [6:0]store		= 7'b0100011;
 
 	// instruction logics
 	logic [6:0]opcode;

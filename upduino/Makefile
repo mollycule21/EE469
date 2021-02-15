@@ -4,3 +4,5 @@ instruction_memory:
 register_file_datapath:
 	-iverilog -g2012 -o register_file_datapath register_file_datapath.sv register_file_datapath_tb.sv
 
+alu:
+	-iverilog -g2012 -o alu alu.sv alu_tb.sv

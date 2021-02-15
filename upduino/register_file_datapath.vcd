@@ -1,0 +1,35 @@
+$date
+	Sun Feb 14 18:46:57 2021
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module register_file_datapath_tb $end
+$var reg 1 ! clk $end
+$upscope $end
+$scope module register_file_datapath_tb $end
+$var reg 32 " instruction [31:0] $end
+$upscope $end
+$scope module register_file_datapath_tb $end
+$var wire 5 # rs1 [4:0] $end
+$upscope $end
+$scope module register_file_datapath_tb $end
+$var wire 5 $ rs2 [4:0] $end
+$upscope $end
+$scope module register_file_datapath_tb $end
+$var wire 5 % rd [4:0] $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b11100 %
+b11111 $
+b11 #
+b1000001111100011000111000110011 "
+0!
+$end
+#50
+1!
