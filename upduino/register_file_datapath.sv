@@ -6,12 +6,13 @@
 `define NUMBER_OF_REGS	32
 
 // need a control logic to determine which type of instruction it is
-module op_type (instruction, RISU_type);
+module op_type (instruction, RISU_type, opcode);
 	input logic [`WORD_SIZE - 1:0]instruction;
 
 	// output logic [4:0]rs1, rs2;
 	// output logic [4:0]rd;
 	output logic [1:0] RISU_type; // 00 = R, 01 = I, 10 = S , 11 = U
+	output logic [7:0] opcode; 
 
 	
 	// 32 32-bit registers 
