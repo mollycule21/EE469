@@ -45,6 +45,8 @@ module register_file_datapath(instruction, rs1, rs2, rd);
 	// I-type: op-imm, jalr, load // all have diff opcodes, but all I type
 	// S-type: branch, store
 	// U-type: lui, auipc, jal
+	
+	// takes in opcode and organizes 32 bit instruction binary depending on the type 
 	always_comb begin
 		if (opcode == op) begin
 			// R-type
