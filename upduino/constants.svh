@@ -58,7 +58,14 @@ localparam [2:0]ALU_SL  = 3'b101;
 localparam [2:0]ALU_SRL = 3'b110;
 localparam [2:0]ALU_SRA = 3'b111;
 
+localparam [2:0] ALU_BEQ  = 3'b000;
+localparam [2:0]ALU_BNE  = 3'b001;
+localparam [2:0]ALU_BLT  = 3'b100;
+localparam [2:0]ALU_BGE  = 3'b101;
+
 // xfer_size
 localparam [2:0]XFER_BYTE 	= 3'b000;
 localparam [2:0]XFER_WORD	= 3'b001;
 localparam [2:0]XFER_DOUBLE	= 3'b010;
+
+
