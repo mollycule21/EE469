@@ -37,6 +37,7 @@ module register_file_datapath(instruction, rs1, rs2, rd);
 	assign opcode = instruction[6:0];
 
 	// check the opcode
+	// 1 opcode for each type 
 	// R-type: op, 
 	// I-type: op-imm, jalr, load
 	// S-type: branch, store
