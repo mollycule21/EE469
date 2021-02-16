@@ -6,7 +6,7 @@
 `define NUMBER_OF_REGS	32
 
 // need a control logic to determine which type of instruction it is
-module register_file_datapath(instruction, RISU_type);
+module op_type (instruction, RISU_type);
 	input logic [`WORD_SIZE - 1:0]instruction;
 
 	// output logic [4:0]rs1, rs2;
