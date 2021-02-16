@@ -1,16 +1,17 @@
 // 32 bit output address_out from pc.sv is inputted into this mododule as instruction 
 // outputs the three register address locations : source 1, source 2, and destination 
-// outputs are then inputted into register file
+// outputs are then inputted into control file 
 
 `define WORD_SIZE		32
 `define NUMBER_OF_REGS	32
 
 // need a control logic to determine which type of instruction it is
-module register_file_datapath(instruction, rs1, rs2, rd);
+module register_file_datapath(instruction, RISU_type);
 	input logic [`WORD_SIZE - 1:0]instruction;
 
-	output logic [4:0]rs1, rs2;
-	output logic [4:0]rd;
+	// output logic [4:0]rs1, rs2;
+	// output logic [4:0]rd;
+	output logic [1:0] RISU_type; // 00 = R, 01 = I, 10 = S , 11 = U
 
 	
 	// 32 32-bit registers 
@@ -50,28 +51,33 @@ module register_file_datapath(instruction, rs1, rs2, rd);
 	always_comb begin
 		if (opcode == op) begin
 			// R-type
-			funct7	= instruction[31:25];
-			rs2		= instruction[24:20];
-			rs1		= instruction[19:15];
-			funct3	= instruction[14:12];
-			rd		= instruction[11:7];
+// 			funct7	= instruction[31:25];
+// 			rs2		= instruction[24:20];
+// 			rs1		= instruction[19:15];
+// 			funct3	= instruction[14:12];
+// 			rd		= instruction[11:7];
+			RISU_type = 00; 
 		end else if (opcode == op_imm || opcode == jalr || opcode == load) begin
 			// I-type
-			imm		= instruction[31:20];
-			rs1		= instruction[19:15];
-			funct3	= instruction[14:12];
-			rd		= instruction[11:7];
+// 			imm		= instruction[31:20];
+// 			rs1		= instruction[19:15];
+// 			funct3	= instruction[14:12];
+// 			rd		= instruction[11:7];
+			
+			RISU_type = 01; 
 		end else if (opcode == branch || opcode == store) begin
 			// S-type
-			imm[11:5]	= instruction[31:25];
-			rs2			= instruction[24:20];
-			rs1			= instruction[19:15];
-			funct3		= instruction[14:12];
-			imm[4:0]	= instruction[11:7];
+// 			imm[11:5]	= instruction[31:25];
+// 			rs2			= instruction[24:20];
+// 			rs1			= instruction[19:15];
+// 			funct3		= instruction[14:12];
+// 			imm[4:0]	= instruction[11:7];
+			RISU_type = 10; 
 		end else begin
 			// U-type
-			imm_U_type	= instruction[31:12];
-			rd			= instruction[11:7];
+// 			imm_U_type	= instruction[31:12];
+// 			rd			= instruction[11:7];
+			RISU_type = 11; 
 		end
 	end
 
