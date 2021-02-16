@@ -1,4 +1,7 @@
 // 32 bit output address_out from pc.sv is inputted into this mododule as instruction 
+// outputs the three register address locations : source 1, source 2, and destination 
+// outputs are then inputted into register file
+
 `define WORD_SIZE		32
 `define NUMBER_OF_REGS	32
 
