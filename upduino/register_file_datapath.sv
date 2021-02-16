@@ -1,4 +1,4 @@
-
+// 32 bit output address_out from pc.sv is inputted into this mododule as instruction 
 `define WORD_SIZE		32
 `define NUMBER_OF_REGS	32
 
