@@ -1,0 +1,151 @@
+$date
+	Sat Feb 13 17:27:10 2021
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module instruction_memory_tb $end
+$var reg 1 ! clk $end
+$upscope $end
+$scope module instruction_memory_tb $end
+$var reg 1 " reset $end
+$upscope $end
+$scope module instruction_memory_tb $end
+$var reg 32 # address [31:0] $end
+$upscope $end
+$scope module instruction_memory_tb $end
+$var wire 32 $ instruction [31:0] $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx $
+b0 #
+1"
+0!
+$end
+#50
+b0 $
+0"
+1!
+#100
+0!
+#150
+1!
+#200
+0!
+#250
+1!
+#300
+0!
+#350
+1!
+#400
+0!
+#450
+b1 #
+1!
+#500
+0!
+#550
+b10 #
+b1 $
+1!
+#600
+0!
+#650
+b10 $
+b11 #
+1!
+#700
+0!
+#750
+b100 #
+b11 $
+1!
+#800
+0!
+#850
+b100 $
+b101 #
+1!
+#900
+0!
+#950
+b110 #
+b101 $
+1!
+#1000
+0!
+#1050
+b110 $
+b111 #
+1!
+#1100
+0!
+#1150
+b1000 #
+b111 $
+1!
+#1200
+0!
+#1250
+b1000 $
+b1001 #
+1!
+#1300
+0!
+#1350
+b1010 #
+b1001 $
+1!
+#1400
+0!
+#1450
+b1010 $
+b1011 #
+1!
+#1500
+0!
+#1550
+b1100 #
+b1011 $
+1!
+#1600
+0!
+#1650
+b1100 $
+b1101 #
+1!
+#1700
+0!
+#1750
+b1110 #
+b1101 $
+1!
+#1800
+0!
+#1850
+b1110 $
+b1111 #
+1!
+#1900
+0!
+#1950
+b10000 #
+b1111 $
+1!
+#2000
+0!
+#2050
+b10000 $
+b10001 #
+1!
+#2100
+0!
+#2150
+b10001 $
+1!
