@@ -14,13 +14,15 @@ module control_signal(instruction, mem_write, reg_write, branch, alu_signal);
 	input logic mem_write, reg_write, branch; 	// if need to write to memory or register
 	input logic [2:0]alu_signal;			// control signal for alu
 	
+	output logic [4:0] rs1, rs2, rd;
+	
 	// reads what opcode is passed in to determine type (RISU) of instruction 
 	logic [1:0] RISU_type; 
 	logic [6:0] opcode; 
 	op_type ot (.instruction(instruction), .RISU_type(RISU_type), .opcode(opcode)) 
 	
 	logic [6:0] funct_7; 
-	logic [4:0] rs1, rs2, rd; 
+	// logic [4:0] rs1, rs2, rd; 
 	logic [2:0] funct_3; 
 	
 	logic [11:0] imm_I;
@@ -64,8 +66,10 @@ module control_signal(instruction, mem_write, reg_write, branch, alu_signal);
 	assign funct_7_3 = {funct7, funct3};
 	
 	
+	// check for ALU operations and whether we're working with memory 
+	regfile_datapth (.opcode(opcode), .alu_signal) 
 	
-	regfile_datapth (.opcode) 
+ 
 	
 	
 	
