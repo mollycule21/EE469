@@ -33,10 +33,6 @@ module op_type (instruction, RISU_type, opcode);
 
 	// instruction logics
 	logic [6:0]opcode;
-	logic [2:0]funct3;
-	logic [6:0]funct7;
-	logic [11:0]imm;		// this imm applies for I and S type
-	logic [19:0]imm_U_type;	// this imm applied for U type
 
 	// load opcode
 	assign opcode = instruction[6:0];
@@ -52,32 +48,14 @@ module op_type (instruction, RISU_type, opcode);
 	always_comb begin
 		if (opcode == op) begin
 			// R-type
-// 			funct7	= instruction[31:25];
-// 			rs2		= instruction[24:20];
-// 			rs1		= instruction[19:15];
-// 			funct3	= instruction[14:12];
-// 			rd		= instruction[11:7];
 			RISU_type = 00; 
 		end else if (opcode == op_imm || opcode == jalr || opcode == load) begin
-			// I-type
-// 			imm		= instruction[31:20];
-// 			rs1		= instruction[19:15];
-// 			funct3	= instruction[14:12];
-// 			rd		= instruction[11:7];
-			
 			RISU_type = 01; 
 		end else if (opcode == branch || opcode == store) begin
 			// S-type
-// 			imm[11:5]	= instruction[31:25];
-// 			rs2			= instruction[24:20];
-// 			rs1			= instruction[19:15];
-// 			funct3		= instruction[14:12];
-// 			imm[4:0]	= instruction[11:7];
 			RISU_type = 10; 
 		end else begin
 			// U-type
-// 			imm_U_type	= instruction[31:12];
-// 			rd			= instruction[11:7];
 			RISU_type = 11; 
 		end
 	end
