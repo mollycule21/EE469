@@ -57,16 +57,16 @@ module alu(clk, reset, control, in_1, in_2, out);
 	
 	logic [`WORD_SIZE - 1:0];
 
-	logic in1_greater_in_2;
-	logic in1_equals_in_2; 
+	logic in1_g_in_2;
+	logic in1_e_in_2; 
 	
 	always_comb begin 
 		if (in_1 > in2) begin 
-			in_1_greater_in_2 = 1'b1;
-			in_1_equals_in_2 = 1'b0;
+			in_1_g_in_2 = 1'b1;
+			in_1_e_in_2 = 1'b0;
 		end else if (in_1 == in_2) begin 
-			in_1_equals_in_2 = 1'b1;
-			in_1_greater_in_2 = 1'b0;
+			in_1_e_in_2 = 1'b1;
+			in_1_g_in_2 = 1'b0;
 		end 
 	end 
 
@@ -76,26 +76,36 @@ module alu(clk, reset, control, in_1, in_2, out);
 			out <= 32'd0;
 		end else if (control == ALU_ADD) begin
 			out <= in_1 + in_2;
+			true <= 0; 
 		end else if (control == ALU_SUB) begin
 			out <= in_1 - in_2;
+			true <= 0; 
 		end else if (control == ALU_AND) begin
 			out <= in_1 & in_2;
+			true <= 0; 
 		end else if (control == ALU_OR) begin
 			out <= in_1 | in_2;
+			true <= 0; 
 		end else if (control == ALU_XOR) begin
 			out <= in_1 ^ in_2;
+			true <= 0; 
 		end else if (control == ALU_SL) begin // also takes care of SLU 
 			// shift left in_1 by in_2 bits
 			out <= in_1 << in_2;
+			true <= 0; 
 		end else if (control == ALU_SRL) begin // also takes care of SRLU
 			// logical shift right in_1 by in_2 bits
 			out <= in_1 >> in_2;
+			true <= 0; 
 		end else if (control == ALU_SRA) begin // also takes care of SRAU
 			// arithmetic shift right in_1 by in_2 bits
 			out <= in_1 >>> in_2;
-		end else if (control == SLT && in_1_greater_in_2 = 1'b0) begin 
-			true <= 1; 	
-		end 
+			true <= 0; 
+		end else if (control == SLT && in_1_g_in_2 = 1'b0) begin 
+			out <= 32'd1; 	
+		end else if (control == SLT && in_1_g_in_2 = 1'b1) begin 
+			out <= 32'd0 
+		end else if 
 	end
 
 endmodule
