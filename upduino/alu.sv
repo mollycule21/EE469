@@ -47,24 +47,32 @@
 `include "alu_signal.svh"
 `define WORD_SIZE	32
 
-module alu(clk, reset, control, in_1, in_2, out);
+module alu(clk, reset, control, in_1, in_2, unsigned_op, out);
 	input logic clk, reset;
 	input logic [3:0]control;							// 3-bit control signal for ALU operation
-	input logic signed [`WORD_SIZE - 1:0]in_1, in_2;	// signed inputs
-
-	output logic signed [`WORD_SIZE - 1:0]out;
-	output true; 
+	input logic [`WORD_SIZE - 1:0]in_1, in_2;	// signed inputs
+	input logic unsigned_op;
+	output logic [`WORD_SIZE - 1:0]out; 
 	
 	logic [`WORD_SIZE - 1:0];
-
+	// need to check and see how to change signed/unsigned 
+	always_comb begin 
+		if (unsigned_op == 0) begin 
+			in_1_final = in_1; 
+			in_1_final = in_2; 
+		end else begin 
+			in_1_final = ~(in_1) + 1;
+			in_2_final = ~(in_2) + 1;
+		end
+	end 
 	logic in1_g_in_2;
 	logic in1_e_in_2; 
 	
 	always_comb begin 
-		if (in_1 > in2) begin 
+		if (in_1_final > in2_final) begin 
 			in_1_g_in_2 = 1'b1;
 			in_1_e_in_2 = 1'b0;
-		end else if (in_1 == in_2) begin 
+		end else if (in_1_final == in_2_final) begin 
 			in_1_e_in_2 = 1'b1;
 			in_1_g_in_2 = 1'b0;
 		end 
