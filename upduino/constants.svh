@@ -49,14 +49,24 @@ localparam [2:0]SWB = 3'b100;
 localparam [2:0]SHU = 3'b101;
 
 // control signals for alu is defined here
-localparam [2:0]ALU_ADD = 3'b000;
-localparam [2:0]ALU_SUB = 3'b001;
-localparam [2:0]ALU_AND = 3'b010;
-localparam [2:0]ALU_OR  = 3'b011;
-localparam [2:0]ALU_XOR = 3'b100;
-localparam [2:0]ALU_SL  = 3'b101;
-localparam [2:0]ALU_SRL = 3'b110;
-localparam [2:0]ALU_SRA = 3'b111;
+// for op 
+localparam [9:0]ALU_ADD_I = 10'b0000000000; 
+localparam [9:0]ALU_SUB = 10'b0100000000;
+localparam [9:0]ALU_AND = 10'b0000000111;
+localparam [9:0]ALU_OR  = 10'b0000000110;
+localparam [9:0]ALU_XOR = 10'b0000000100;
+localparam [9:0]ALU_SLL = 10'b0000000001; // shift left logical 
+localparam [9:0]ALU_SRL = 10'b0000000101;
+localparam [9:0]ALU_SRA = 10'b0100000101;
+localparam [9:0]ALU_BLT_SLT_I = 10'b0000000010; // set less than (op) branch less than (branch)
+
+localparam [2:0]SLTIU = 3'b011; 
+localparam [2:0]XORI  = 3'b100;
+localparam [2:0]ORI	  = 3'b110;
+localparam [2:0]ANDI  = 3'b111;
+localparam [2:0]SLLI  = 3'b001;
+localparam [2:0]SRLI  = 3'b101;		// SRLI and SRAI has the same value
+localparam [2:0]SRAI  = 3'b101;		// need to check their imm[11:5] values
 
 localparam [2:0] ALU_BEQ  = 3'b000;
 localparam [2:0]ALU_BNE  = 3'b001;
