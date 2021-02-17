@@ -65,9 +65,81 @@ module control_signal(instruction, mem_write, reg_write, branch, alu_signal);
 	logic [9:0]funct_7_3;// funct7 and funct3 concated
 	assign funct_7_3 = {funct7, funct3};
 	
+	logic unsigned_op;
 	
-	// check for ALU operations and whether we're working with memory 
-	regfile_datapth (.opcode(opcode), .alu_signal) 
+	// check what instruction operation we're working with 
+	// once we figure what what instruction operation we need, we can pass it in as control signals to different modules which includes ALU operations
+	// need to be careful about unsighed for SLTU, BLTU, BGEU, LBU, LWU, LHU
+	always_comb begin
+ 		case(opcode)
+		
+ 		op: mem_write = 1'b0; reg_write = 1'b1;
+	
+			if (funct7_3 == ADD) begin
+ 				alu_signal = ALU_ADD;
+				
+ 			end else if (funct7_3 == SUB) begin
+ 				alu_signal = ALU_SUB;
+
+ 			end else if (funct7_3 == SLL) begin
+ 				alu_signal = ALU_SL;
+
+ 			end else if (funct7_3 == SLT) begin
+ 				alu_signal = ALU_SLT  ;
+
+ 			end else if (funct7_3 == SLTU) begin
+ 				alu_signal = ALU_SLTU
+			
+ 			end else if (funct7_3 == XOR) begin
+ 				alu_signal = ALU_XOR;
+
+ 			end else if (funct7_3 == SRL) begin
+ 				alu_signal = ALU_SRL;
+
+ 			end else if (funct7_3 == SRA) begin
+ 				alu_signal = ALU_SRA;
+
+ 			end else if (funct7_3 == OR) begin
+ 				alu_signal = ALU_OR;
+
+ 			end else begin 	// AND CASE
+ 				alu_signal = ALU_AND;
+
+ 			end
+			
+ 		op-imm: mem_write = 1'b0; reg_write = 1'b1;
+
+			if (funct7_3 == SLTI) begin
+ 				alu_signal = ALU_ADD;
+				unsigned_op = 1; 
+
+ 			end else if (funct7_3 == SLLI) begin
+ 				alu_signal = ALU_SL;
+
+ 			end else if (funct7_3 == SLT) begin
+ 				// need work here
+ 				alu_signal = ;
+
+ 			end else if (funct7_3 == SLTU) begin
+ 				// need work here
+ 			end else if (funct7_3 == XOR) begin
+ 				alu_signal = ALU_XOR;
+
+ 			end else if (funct7_3 == SRL) begin
+ 				alu_signal = ALU_SRL;
+
+ 			end else if (funct7_3 == SRA) begin
+ 				alu_signal = ALU_SRA;
+
+ 			end else if (funct7_3 == OR) begin
+ 				alu_signal = ALU_OR;
+
+ 			end else begin 		// AND CASE
+ 				alu_signal = ALU_AND;
+
+ 			end
+
+ 		endcase
 	
  
 	
