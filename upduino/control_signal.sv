@@ -58,9 +58,12 @@ module control_signal(instruction, mem_write, reg_write, branch, alu_signal);
 			rd = instruction[11:7];
 		end
 	end
-
+	
+	// R type only logic 
 	logic [9:0]funct_7_3;// funct7 and funct3 concated
 	assign funct_7_3 = {funct7, funct3};
+	
+	
 	
 	regfile_datapth (.opcode) 
 	
