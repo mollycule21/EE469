@@ -1,9 +1,8 @@
-//	top-level module for program counter
-//
+// program counter
 
-module pc(clk, reset, address_increment_en, address_in, address_out);
+module pc(clk, reset, take_branch, address_increment_en, address_in, address_out);
 	input logic clk, reset;
-	input logic address_increment_en;
+	input logic take_branch, address_increment_en;
 	input logic [31:0]address_in;
 	output logic [31:0]address_out;
 	
@@ -16,9 +15,11 @@ module pc(clk, reset, address_increment_en, address_in, address_out);
 	always@(posedge clk) begin
 		if (reset) begin 
 			address_out <= 32'd0;
-		end else if (address_increment_en == 0) begin
+		end else if (take_branch) begin
 			address_out <= address_in;
-		end else address_out <= nex_address;
+		end else if (address_increment_en) begin
+			address_out <= nex_address;
+		end else address_out <= address_out;
 	end
 
 endmodule

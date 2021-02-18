@@ -13,13 +13,6 @@ module instruction_memory(clk, reset, address, instruction);
 	input logic 	[`WORD_SIZE - 1:0]address;		// 32-bit address
 	output logic 	[`WORD_SIZE - 1:0]instruction;	// 4-byte instruction
 	
-	// assertions, need to check if address is in bound
-//	initial begin
-//		assert(address <= `NUMBER_OF_INSTRUCTIONS)
-//		else $error("pc address exceeds instruction memory size");
-//	end
-
-
 	// instruction memeory
 	logic [31:0] instruction_memory[`NUMBER_OF_INSTRUCTIONS - 1:0];
 
