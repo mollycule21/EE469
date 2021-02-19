@@ -91,6 +91,10 @@ localparam [3:0]ALU_BGE_U	= 4'b1101;
 localparam [3:0]ALU_SLT_I	= 4'b1110;	// set less than operations
 localparam [3:0]ALU_SLT_I_U = 4'b1111;	
 
+// alu immediate read signals
+localparam [1:0]ALU_READ_RS2		= 2'b00;
+localparam [1:0]ALU_READ_IMM		= 2'b01;
+localparam [1:0]ALU_READ_IMM_U_J	= 2'b10;
 
 // xfer_size
 localparam [2:0]XFER_BYTE 	= 3'b000;
