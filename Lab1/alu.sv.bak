@@ -8,15 +8,23 @@
 
 `define WORD_SIZE	32
 
-module alu(clk, reset, control, in_1, in_2, imm, imm_en, out, take_branch);
+module alu(clk, reset, control, in_1, read_out_2, imm, imm_U_J, imm_en, out, take_branch);
 	`include "constants.svh"
 
-	input logic clk, reset, imm_en;
-	input logic [3:0]control;							// 3-bit control signal for ALU operation
-	input logic [`WORD_SIZE - 1:0]in_1, in_2;			// signed inputs
-	input logic 
+	input logic clk, reset;
+	input logic [1:0]imm_en;
+	input logic [3:0]control;								// 3-bit control signal for ALU 
+	input logic [`WORD_SIZE - 1:0]in_1, read_out_2;			// signed inputs
+	input logic [11:0]imm;
+	input logic [19:0]imm_U_J;
 	output logic [`WORD_SIZE - 1:0]out; 
 	output logic take_branch;
+
+	// combinational logic for picking which value to take as input 2
+	always_comb begin
+
+	end
+
 
 	logic [`WORD_SIZE - 1:0]less_than_temp;
 

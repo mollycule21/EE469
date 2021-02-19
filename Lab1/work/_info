@@ -1,0 +1,418 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/mollyle/EE469/Lab1
+vadder_testbench
+Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+!s110 1613294168
+!i10b 1
+!s100 kfJ134HD9edSKLV4W8B<]2
+IFA8jJ1GAIaMk`@??cRz]T0
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+Z3 !s105 full_adder_sv_unit
+S1
+R0
+w1613289526
+Z4 8full_adder.sv
+Z5 Ffull_adder.sv
+Z6 L0 28
+Z7 OV;L;10.5b;63
+r1
+!s85 0
+31
+!s108 1613294168.000000
+Z8 !s107 full_adder.sv|
+Z9 !s90 -reportprogress|300|-sv|-work|work|full_adder.sv|
+!i113 1
+Z10 o-sv -work work
+Z11 tCvgOpt 0
+valu_1_bit
+R1
+Z12 !s110 1613295997
+!i10b 1
+!s100 Ijn9H;8a^Cl8dXFQ[k]@42
+Ik[]=n@>k?;aB?HWniDE0U2
+R2
+Z13 !s105 alu_1_bit_sv_unit
+S1
+R0
+Z14 w1613295918
+Z15 8alu_1_bit.sv
+Z16 Falu_1_bit.sv
+Z17 L0 18
+R7
+r1
+!s85 0
+31
+Z18 !s108 1613295996.000000
+Z19 !s107 alu_1_bit.sv|
+Z20 !s90 -reportprogress|300|-sv|-work|work|alu_1_bit.sv|
+!i113 1
+R10
+R11
+valu_1_bit_testbench
+R1
+R12
+!i10b 1
+!s100 J1g79dE4Pm_m^h99YIMT11
+I<[=VkKE5X4Fz_PWbDhUFa3
+R2
+R13
+S1
+R0
+R14
+R15
+R16
+L0 61
+R7
+r1
+!s85 0
+31
+R18
+R19
+R20
+!i113 1
+R10
+R11
+vfull_adder
+R1
+R12
+!i10b 1
+!s100 CAX_ZJbbALhJV[1PjOEnk0
+IVMNLng09NSDMbYXE4>3l:3
+R2
+R3
+S1
+R0
+Z21 w1613294690
+R4
+R5
+Z22 L0 10
+R7
+r1
+!s85 0
+31
+Z23 !s108 1613295997.000000
+R8
+R9
+!i113 1
+R10
+R11
+vfull_adder_testbench
+R1
+R12
+!i10b 1
+!s100 88W`iZ8S6;dQXOcAg[EED0
+I]WAiU8n9=U>cbnEz@af4:3
+R2
+R3
+S1
+R0
+R21
+R4
+R5
+R6
+R7
+r1
+!s85 0
+31
+R23
+R8
+R9
+!i113 1
+R10
+R11
+vmux8_1
+R1
+Z24 !s110 1613292070
+!i10b 1
+!s100 Bk_DH[mVG6N8]E?e[h;jV3
+INW[085RSFS5<R=Lk>Vz:73
+R2
+Z25 !s105 mux_8_1_sv_unit
+S1
+R0
+Z26 w1613291963
+Z27 8mux_8_1.sv
+Z28 Fmux_8_1.sv
+R22
+R7
+r1
+!s85 0
+31
+Z29 !s108 1613292070.000000
+Z30 !s107 mux_8_1.sv|
+Z31 !s90 -reportprogress|300|-sv|-work|work|mux_8_1.sv|
+!i113 1
+R10
+R11
+vmux8_1_testbench
+R1
+R24
+!i10b 1
+!s100 DJPU73Y2DTC0ZUj<=ck5l2
+I]j5CWP;B2=fgJ:DU9l6FN3
+R2
+R25
+S1
+R0
+R26
+R27
+R28
+L0 22
+R7
+r1
+!s85 0
+31
+R29
+R30
+R31
+!i113 1
+R10
+R11
+vmux_2_1
+R1
+R12
+!i10b 1
+!s100 L[]8N>DoWd2gbGB5IT=FQ2
+IhbZHem[HZBIEzGQlXhH;X3
+R2
+Z32 !s105 mux_2_1_sv_unit
+S1
+R0
+Z33 w1613292214
+Z34 8mux_2_1.sv
+Z35 Fmux_2_1.sv
+R22
+R7
+r1
+!s85 0
+31
+R23
+Z36 !s107 mux_2_1.sv|
+Z37 !s90 -reportprogress|300|-sv|-work|work|mux_2_1.sv|
+!i113 1
+R10
+R11
+vmux_2_1_testbench
+R1
+R12
+!i10b 1
+!s100 5if?MKhzHCZF@QJFlXbo@1
+I5X2WW1<TS2hck:J=izb2b1
+R2
+R32
+S1
+R0
+R33
+R34
+R35
+L0 16
+R7
+r1
+!s85 0
+31
+R23
+R36
+R37
+!i113 1
+R10
+R11
+vmux_4_1
+R1
+R12
+!i10b 1
+!s100 FXYN]F7KfPRO5=DL^b@Qm3
+I0bSGN_3FOeYO9CY63o^9M2
+R2
+Z38 !s105 mux_4_1_sv_unit
+S1
+R0
+Z39 w1613292204
+Z40 8mux_4_1.sv
+Z41 Fmux_4_1.sv
+L0 11
+R7
+r1
+!s85 0
+31
+R23
+Z42 !s107 mux_4_1.sv|
+Z43 !s90 -reportprogress|300|-sv|-work|work|mux_4_1.sv|
+!i113 1
+R10
+R11
+vmux_4_1_testbench
+R1
+R12
+!i10b 1
+!s100 @QYkYfha_mn[PB7]3[[XZ3
+IB2h8VDCa3Sinlo]SbY]O?1
+R2
+R38
+S1
+R0
+R39
+R40
+R41
+L0 24
+R7
+r1
+!s85 0
+31
+R23
+R42
+R43
+!i113 1
+R10
+R11
+vmux_8_1
+R1
+R12
+!i10b 1
+!s100 nSY?PT>8iiN_CcDZIX0TJ0
+If;CH[_fz1`Eec;Ng1AVJg2
+R2
+R25
+S1
+R0
+Z44 w1613293318
+R27
+R28
+R22
+R7
+r1
+!s85 0
+31
+R23
+R30
+R31
+!i113 1
+R10
+R11
+vmux_8_1_testbench
+R1
+R12
+!i10b 1
+!s100 fkd[>QmHRZaPmS[?]T5[60
+I4L=BLFRc82<KalRU<9GHj1
+R2
+R25
+S1
+R0
+R44
+R27
+R28
+L0 23
+R7
+r1
+!s85 0
+31
+R23
+R30
+R31
+!i113 1
+R10
+R11
+vregister_file
+R1
+Z45 !s110 1613292131
+!i10b 1
+!s100 kh0b`iKBUXOEiE8THjk893
+IGjhh;2K^F>d`l5l3lA?mT2
+R2
+Z46 !s105 register_file_sv_unit
+S1
+R0
+Z47 w1613280589
+Z48 8register_file.sv
+Z49 Fregister_file.sv
+L0 9
+R7
+r1
+!s85 0
+31
+Z50 !s108 1613292131.000000
+Z51 !s107 register_file.sv|
+Z52 !s90 -reportprogress|300|-sv|-work|work|register_file.sv|
+!i113 1
+R10
+R11
+vregister_file_testbench
+R1
+R45
+!i10b 1
+!s100 F3inU7Z]B@^]YVmU^jBU_3
+I`cIHE;hUF4HnE5S9=n_gB0
+R2
+R46
+S1
+R0
+R47
+R48
+R49
+L0 48
+R7
+r1
+!s85 0
+31
+R50
+R51
+R52
+!i113 1
+R10
+R11
+vtest
+R1
+Z53 !s110 1613276158
+!i10b 1
+!s100 kzK6BR@iY0EQdFCOJOU:k0
+I9NZzJ_SSXENK=7zoEYZLz2
+R2
+Z54 !s105 test_sv_unit
+S1
+R0
+Z55 w1613276100
+Z56 8test.sv
+Z57 Ftest.sv
+L0 1
+R7
+r1
+!s85 0
+31
+Z58 !s108 1613276158.000000
+Z59 !s107 test.sv|
+Z60 !s90 -reportprogress|300|-sv|-work|work|test.sv|
+!i113 1
+R10
+R11
+vtest_testbench
+R1
+R53
+!i10b 1
+!s100 ?nNFJMFOJ`2A:n0AVDeG82
+IBPj6_3;:lP;V5fI2lU60K1
+R2
+R54
+S1
+R0
+R55
+R56
+R57
+R17
+R7
+r1
+!s85 0
+31
+R58
+R59
+R60
+!i113 1
+R10
+R11
