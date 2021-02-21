@@ -1,59 +1,56 @@
-// UART = "usb port" 
-// 1) code from computer 
-// 2) rv32-i complier compiles code into binary form and exports a file 
-// 3) take files and send it to hardware 
-// 4) instruction memory will read memory file and load all contents inside memeory file into 2D array 
-// 5) use address to specify which apart of 2D arrary we want to acces 
 
+`define NUMBER_OF_REGS 32
 
-module register_file (input logic [4:0] read_reg_1, read_reg_2, wr_reg, 
-						input logic [31:0] wr_data,  
-						input logic wr_en, 
-						input clk,  
-						output logic [31:0] read_out_1, read_out_2);
+module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg, 
+						wr_data, wr_en, read_out_1, read_out_2);
+	input clk, reset;
+	input logic [4:0] read_reg_1, read_reg_2, wr_reg; 
+	input logic [31:0] wr_data;  
+	input logic wr_en; 
+	output logic [31:0] read_out_1, read_out_2;
+
+	// define regfile 
+	logic[31:0] register [`NUMBER_OF_REGS - 1:0];
 	
-	// initalize regfile 
-	logic[31:0] register [31:0];
 	
-	// genvar i; 
-	// generate 
-	initial begin 
-		for (int i = 0; i < 32; i = i + 1) begin 
-				//hardcode for testing purposes 
-				if (i == 2) begin
+
+	always_ff@(posedge clk) begin 
+		if (reset) begin
+			for (int i = 0; i < `NUMBER_OF_REGS; i = i + 1) begin
+				// hardcode for testing purposes - start 
+				if (i == 2) begin 
 					register[i] = 32'd20;
-				end 
-				 else if (i == 4) begin 
-					register[i] = 32'd40;
-				end 
-				else begin 
-					register[i] = 32'd0;
-				end 
-		end 
-	end 
-	// endgenerate 
-
-
-	assign read_out_1 = register[read_reg_1];
-	assign read_out_2 = register[read_reg_2];
-
-	always @(posedge clk) begin 
-		if (wr_en) begin 
+				end else if (i == 4) begin 
+					register [i] = 32'd40;
+				end else if (i == 8) begin 
+					register[i] = 32'd16; 
+				end else begin 
+				register[i] <= 32'd0;
+				end //hardcode end 
+				
+				// register[i] <= 32'd0; // uncomment when not hardcode testing 
+				
+			end
+		end else if (wr_en) begin 
 			register[wr_reg] <= wr_data; 
-		end 
+		end else begin
+			read_out_1 <= register[read_reg_1];
+			read_out_2 <= register[read_reg_2];
+		end
 	end 
 
 endmodule 
 
-// Correct - cofirmed on modelsim 
-module register_file_testbench();
+
+// Correct on modelsim 
+module register_file_tb();
 	logic [4:0] read_reg_1, read_reg_2, wr_reg;
 	logic [31:0] wr_data;  
-	logic wr_en, clk; 
+	logic wr_en, clk, reset; 
 	logic [31:0] read_out_1, read_out_2;
 	 
 
-	register_file dut (.read_reg_1, .read_reg_2, .wr_reg, .wr_data, .wr_en, .clk, .read_out_1, .read_out_2);
+	register_file dut (.clk, .reset, .read_reg_1, .read_reg_2, .wr_reg, .wr_data, .wr_en, .read_out_1, .read_out_2);
 	
 	
 	// Set up the clock.
@@ -67,9 +64,9 @@ module register_file_testbench();
 	 // Set up the inputs to the design. Each line is a clock cycle.
 	initial begin
 		@(posedge clk);
-
-		wr_en <= 0; 
-		@(posedge clk);
+		reset <= 1; @(posedge clk);
+		reset <= 0; @(posedge clk);
+		wr_en <= 0; @(posedge clk);
 		read_reg_1 <= 4'd2; 
 		read_reg_2 <= 4'd4;
 		wr_reg <= 4'd8; 
