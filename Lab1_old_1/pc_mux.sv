@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 `define WORD_SIZE		32
 
 module pc_mux(address_from_increment, address_from_branch, alu_branch, control_branch, pc_out);
@@ -11,6 +15,7 @@ module pc_mux(address_from_increment, address_from_branch, alu_branch, control_b
 	end
 
 endmodule
+<<<<<<< HEAD
 
 // Correct on Modelsim 
 module pc_mux_tb(); 
@@ -34,3 +39,5 @@ module pc_mux_tb();
 	end 
 	
 endmodule 
+=======
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843

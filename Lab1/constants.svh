@@ -99,4 +99,10 @@ localparam [1:0]ALU_READ_IMM_U_J	= 2'b10;
 // xfer_size
 localparam [2:0]XFER_BYTE 	= 3'b000;
 localparam [2:0]XFER_HALF	= 3'b001;
+<<<<<<< HEAD
 localparam [2:0]XFER_WORD	= 3'b010;
+=======
+localparam [2:0]XFER_WORD	= 3'b010;
+
+
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843

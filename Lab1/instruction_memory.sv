@@ -31,6 +31,7 @@ module instruction_memory(clk, reset, address, instruction);
 		end
 	end
 endmodule
+<<<<<<< HEAD
 
 // Correct on Modelsim 
 module instruction_memory_tb();
@@ -91,3 +92,5 @@ module instruction_memory_tb();
 endmodule
 
 
+=======
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843

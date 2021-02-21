@@ -1,11 +1,16 @@
 
+<<<<<<< HEAD
 `define WORD_SIZE	32
+=======
+`define WORD_SIZE		32
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 
 module pc_adder(pc_en, address_in, address_out);
 	input logic pc_en;
 	input logic [`WORD_SIZE - 1:0]address_in;
 	output logic [`WORD_SIZE - 1:0]address_out;
 
+<<<<<<< HEAD
 	always_comb begin
 		if (!pc_en) 
 			address_out = address_in;
@@ -35,3 +40,11 @@ module pc_adder_tb();
 		
 	endmodule  // pc_adder_estbench
 
+=======
+	always begin
+		if (!pc_en) address_out = address_in;
+		else address_out = address_in + 4;
+	end
+
+endmodule
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843

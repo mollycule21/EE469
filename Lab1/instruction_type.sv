@@ -1,17 +1,28 @@
 // 32 bit output address_out from pc.sv is inputted into this mododule as instruction 
 
+<<<<<<< HEAD
 `define WORD_SIZE	32
 
 
 module instruction_type(instruction, instruction_type, opcode);
 
+=======
+`define WORD_SIZE		32
+
+module instruction_type(instruction, instruction_type, opcode);
+	`include "constants.svh";
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 
 	input logic [`WORD_SIZE - 1:0]instruction;
 
 	output logic [2:0] instruction_type; 	
 	output logic [6:0] opcode; 
+<<<<<<< HEAD
 	
 	`include "constants.svh"
+=======
+
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 	// load opcode
 	assign opcode = instruction[6:0];
 
@@ -25,6 +36,7 @@ module instruction_type(instruction, instruction_type, opcode);
 	
 	// takes in opcode and determines which instruction type 
 	always_comb begin
+<<<<<<< HEAD
 		case(opcode)
 			op:			instruction_type = INSTRUCTION_TYPE_R; 
 			op_imm:		instruction_type = INSTRUCTION_TYPE_I;
@@ -76,4 +88,20 @@ module instruction_type_tb();
 		
 	endmodule  // pc_adder_estbench
 
+=======
+		case(opcode) begin
+		op:			instruction_type = INSTRUCTION_TYPE_R; 
+		op_imm:		instruction_type = INSTRUCTION_TYPE_I;
+		jalr:			instruction_type = INSTRUCTION_TYPE_I;
+		load:			instruction_type = INSTRUCTION_TYPE_I;
+		branch:		instruction_type = INSTRUCTION_TYPE_B;
+		store:		instruction_type = INSTRUCTION_TYPE_S;
+		lui:			instruction_type = INSTRUCTION_TYPE_U; // load upgrade immediate
+		auipc:		instruction_type = INSTRUCTION_TYPE_U;
+		jal:			instruction_type = INSTRUCTION_TYPE_J;
+		end
+	end
+
+endmodule 
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 			

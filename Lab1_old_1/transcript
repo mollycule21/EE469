@@ -82,3 +82,5 @@ do runlab.do
 # ** Note: $stop    : instruction_memory.sv(88)
 #    Time: 2150 ps  Iteration: 1  Instance: /instruction_memory_tb
 # Break in Module instruction_memory_tb at instruction_memory.sv line 88
+# End time: 21:07:52 on Feb 20,2021, Elapsed time: 42:45:15
+# Errors: 0, Warnings: 0

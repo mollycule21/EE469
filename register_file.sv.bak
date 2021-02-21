@@ -1,6 +1,9 @@
 
-
+<<<<<<< HEAD
 `define NUMBER_OF_REGS 32
+=======
+`define NUMBER_OF_REGS		32
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 
 module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg, 
 						wr_data, wr_en, read_out_1, read_out_2);
@@ -12,8 +15,10 @@ module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg,
 
 	// define regfile 
 	logic[31:0] register [`NUMBER_OF_REGS - 1:0];
-
-
+<<<<<<< HEAD
+	
+	
+=======
 	
 	// initialize regfile to all 0 
 	initial begin 
@@ -22,10 +27,12 @@ module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg,
 		end 
 	end 
 
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
+
 	always_ff@(posedge clk) begin 
 		if (reset) begin
 			for (int i = 0; i < `NUMBER_OF_REGS; i = i + 1) begin
-
+<<<<<<< HEAD
 				// hardcode for testing purposes - start 
 				if (i == 2) begin 
 					register[i] = 32'd20;
@@ -38,8 +45,10 @@ module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg,
 				end //hardcode end 
 				
 				// register[i] <= 32'd0; // uncomment when not hardcode testing 
-
+				
+=======
 				register[i] <= 32'd0;
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 			end
 		end else if (wr_en) begin 
 			register[wr_reg] <= wr_data; 
@@ -52,12 +61,17 @@ module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg,
 endmodule 
 
 
+<<<<<<< HEAD
 // Correct on modelsim 
 module register_file_tb();
+=======
+
+
+
 
 // Correct - cofirmed on modelsim 
 module register_file_testbench();
-
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 	logic [4:0] read_reg_1, read_reg_2, wr_reg;
 	logic [31:0] wr_data;  
 	logic wr_en, clk, reset; 

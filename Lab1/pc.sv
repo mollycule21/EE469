@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 `define WORD_SIZE		32
 
 
@@ -36,3 +37,24 @@ module pc (clk, reset, pc_en, address_in, imm, imm_U_J, imm_en,
 					.control_branch(control_branch), .pc_out(address_in));
 
 endmodule
+=======
+// program counter
+
+module pc(clk, reset, address_in, address_out);
+	input logic clk, reset, pc_en;
+	input logic [31:0]address_in;
+	output logic [31:0]address_out;
+	
+
+	// DFF logic
+	always@(posedge clk) begin
+		if (reset) begin 
+			address_out <= 32'd0;
+		end else  begin 
+			address_out <= address_in;
+		end
+	end
+
+endmodule
+
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843

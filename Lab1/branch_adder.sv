@@ -10,6 +10,7 @@ module branch_adder(pc, imm, imm_U_J, imm_en, pc_out);
 	output logic [`WORD_SIZE - 1:0]pc_out;
 	
 	logic [`WORD_SIZE - 1:0]temp;
+<<<<<<< HEAD
 	
 	always_comb begin
 		case(imm_en)
@@ -19,14 +20,35 @@ module branch_adder(pc, imm, imm_U_J, imm_en, pc_out);
 			ALU_READ_IMM_U_J: begin 
 				pc_out = pc + {imm_U_J, 11'd0}; 
 			end
+=======
+	logic dummy; 
+	always_comb begin
+		case(imm_en)
+		ALU_READ_IMM: begin
+			temp = {19'd0, imm, 1'b0}; // disregarding 0 b/c it's always 0 in risc v instruction manual 
+		end
+		ALU_READ_IMM_U_J: begin
+			temp[`WORD_SIZE - 1:12] = imm_U_J;
+		end
+		// default: temp = 32'd0; 
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 		
 		endcase
 	end 
 
+<<<<<<< HEAD
 
 endmodule
 
 // Correct on Modelsim 
+=======
+	always_comb begin
+		pc_out = (pc + temp);		
+	end
+
+endmodule
+
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 module branch_adder_tb();
 
 	`include "constants.svh"
@@ -48,12 +70,23 @@ module branch_adder_tb();
 		pc <= {20'd0, 12'b010101010101}; 					#DELAY; 
 		imm_en <= ALU_READ_IMM;									#DELAY; // pc_out = {20'd0, 12'b101010101111}
 		
+<<<<<<< HEAD
 		imm_en <= 11;												#DELAY;
 		imm_U_J <= 20'b11111111111111111100;
 		pc <= {19'd0, 1'b1, 12'd0}; 							#DELAY; 
 		imm_en <= ALU_READ_IMM_U_J;							#DELAY; // pc_out = {20'b11111111111111111101, 12'd0} 
+=======
+		imm_en <= 00;												#DELAY;
+		imm_U_J <= 20'b10101010101010101010;
+		pc <= {20'b01010101010101010101, 12'd0}; 			#DELAY; 
+		imm_en <= ALU_READ_IMM_U_J;							#DELAY; // pc_out = {20'b11111111111111111111, 12'd0} 
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843
 		$stop; 
 	end 
 	
 endmodule 
 	
+<<<<<<< HEAD
+=======
+
+>>>>>>> 87a68024dc4cc71812ce6563ccefe90a5c547843

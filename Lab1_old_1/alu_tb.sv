@@ -7,10 +7,14 @@ module alu_tb();
 	logic take_branch;
 	logic signed [`WORD_SIZE - 1:0]in_1, in_2;
 	logic signed [`WORD_SIZE - 1:0]out;
+	logic [11:0]imm;
+	logic [19:0]imm_U_J;
+	logic [1:0]imm_en;
 
 	// dut
 	alu alu_dut(.clk(clk), .reset(reset), .control(control),
-				.in_1(in_1), .in_2(in_2), .out(out), .take_branch(take_branch));
+				.in_1(in_1), .in_2(in_2), .imm(imm), .imm_U_J(imm_U_J), 
+				.imm_en(imm_en), .out(out), .take_branch(take_branch));
 
 	// set up clock
 	parameter CLOCK_PERIOD = 100;
@@ -27,10 +31,10 @@ module alu_tb();
 
 	// tests
 	initial begin
-		reset <= 1;														@(posedge clk);
+		reset <= 1;	imm_en <= ALU_READ_RS2;								@(posedge clk);
 		// addition
 		reset <= 0; 
-		control <= ALU_ADD_I; in_1 <= 32'd9; in_2 <= 32'd11;			@(posedge clk);	
+		control <= ALU_ADD_I; in_1 <= -32'd2; in_2 <= 32'd11;			@(posedge clk);	
 		// subtraction, result is negative
 		control <= ALU_SUB_I;											@(posedge clk);
 		// subtraction, result is positive
