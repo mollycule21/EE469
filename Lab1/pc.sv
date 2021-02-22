@@ -2,7 +2,7 @@
 `define WORD_SIZE		32
 
 
-module pc_top_level(clk, reset, imm, imm_U_J, imm_en,
+module pc(clk, reset, imm, imm_U_J, imm_en,
 					alu_branch, control_branch, address_out);
 	`include "constants.svh"
 	
