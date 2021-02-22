@@ -17,7 +17,7 @@ module pc_top_level(clk, reset, imm, imm_U_J, imm_en,
 	logic [`WORD_SIZE - 1:0]address_from_increment, address_from_branch;
 
 
-	pc my_pc(.clk(clk), .reset(reset), .address_in(address_in), .address_out(address_out));
+	pc_in_out pc_i_o (.clk(clk), .reset(reset), .address_in(address_in), .address_out(address_out));
 	
 	pc_adder p_adder(.address_in(address_out), 
 					.address_out(address_from_increment));
