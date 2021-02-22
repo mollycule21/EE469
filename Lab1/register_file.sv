@@ -55,9 +55,6 @@ endmodule
 // Correct on modelsim 
 module register_file_tb();
 
-// Correct - cofirmed on modelsim 
-module register_file_testbench();
-
 	logic [4:0] read_reg_1, read_reg_2, wr_reg;
 	logic [31:0] wr_data;  
 	logic wr_en, clk, reset; 
