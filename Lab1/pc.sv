@@ -1,6 +1,6 @@
 // program counter
 
-module pc(clk, reset, address_in, address_out);
+module pc_in_out(clk, reset, address_in, address_out);
 	input logic clk, reset, pc_en;
 	input logic [31:0]address_in;
 	output logic [31:0]address_out;
