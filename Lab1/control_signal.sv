@@ -1,3 +1,4 @@
+
 `define WORD_SIZE	32
 
 
@@ -46,8 +47,16 @@ module control_signal(instruction, mem_write, reg_write,
 		end
 
 		INSTRUCTION_TYPE_I: begin
+			if (opcode == op_imm && (funct_3 == SLLI || funct_3 == SRLI || funct_3 == SRAI)) begin
+				imm[4:0]  = instruction[24:20];
+				// sign extending
+				if (instruction[24]) imm[11:5] = 7'b1;
+				else imm[11:5] = 7'b0;
+			end else begin
+				imm = instruction[31:20];
+			end
+
 			imm_en 			= ALU_READ_IMM;
-			imm 			= instruction[31:20];
 			rs1 			= instruction[19:15];
 			funct_3 			= instruction[14:12];
 			rd 				= instruction[11:7];
@@ -60,7 +69,7 @@ module control_signal(instruction, mem_write, reg_write,
 		INSTRUCTION_TYPE_S: begin
 			// STORE:  mem[rs2[value] + imm] <- stored [rs1[value]] 
 			imm_en 			= ALU_READ_IMM; 
-			imm[11:5]		= instruction[31:15];
+			imm[11:5]		= instruction[31:25];
 			imm[4:0]		= instruction[11:7];  
 			rs2				= instruction[24:20]; 
 			rs1				= instruction[19:15];  
@@ -163,8 +172,10 @@ module control_signal(instruction, mem_write, reg_write,
 			ORI:	alu_signal = ALU_OR_I;
 			ANDI:	alu_signal = ALU_AND_I;
 			SLLI:	alu_signal = ALU_SLL_I;
-			SRLI:	alu_signal = ALU_SRL_I;
-			SRAI:	alu_signal = ALU_SRA_I;
+			SRLI: begin
+				if (instruction[30]) alu_signal = ALU_SRA_I;
+				else alu_signal = ALU_SRL_I;
+			end
 			default:alu_signal = 5'bx;
 			endcase
  		end
@@ -252,7 +263,7 @@ module control_signal_tb();
 
 
 	// dut
-	control_signal dut (.instruction, .mem_write, .reg_write, 
+	control_signal control(.instruction, .mem_write, .reg_write, 
 						.control_branch, .jalr_branch, .alu_signal, 
 						.rs1, .rs2, .rd, .imm, .imm_U_J, .imm_en, .xfer_size);
 
@@ -263,248 +274,92 @@ module control_signal_tb();
 		forever #(CLOCK_PERIOD / 2) clk <= ~clk;
 	end
 
-//	initial begin
-//		$dumpfile("control_signal.vcd");
-//		$dumpvars(0, clk, instruction, mem_write, reg_write, control_branch,
-//					jalr_branch, alu_signal, rs1, rs2, rd, imm, imm_U_J, imm_en, xfer_size);
-//	end
-
+	initial begin
+		$dumpfile("control_signal.vcd");
+		$dumpvars(0, clk, instruction, mem_write, reg_write, control_branch,
+					jalr_branch, alu_signal, rs1, rs2, rd, imm, imm_U_J, imm_en, xfer_size);
+	end
 
 	// tests
 	initial begin
 		// add a3, a3, t0
-		instruction <= 32'h005686b3;		@(posedge clk); /* mem_write = 0  reg_write = 1 , 
-									control_branch = 0, jalr_branch = 0, alu_signal = 0
-									rs1 = instruction [19:15] rs2 = instruction [24:20]
-									imm_en = 2'b00, imm = xx, imm_u_j = xx, xfer_size = 2'bxx */
+		instruction <= 32'h005686b3;		@(posedge clk);
 		// sub a5, a5, s0
-		instruction <= 32'h408787b3;		@(posedge clk); /* alu_signal = 5'b00001;
-									rs1 = instruction [19:15] rs2 = instruction [24:20] */
-																			
+		instruction <= 32'h408787b3;		@(posedge clk);
 		// sll a4, s5, s0
-		instruction <= 32'h008a9733;		@(posedge clk); /* alu_signal = 5'b00101;	
-																			rs1 = instruction [19:15] rs2 = instruction [24:20] */
-																			
+		instruction <= 32'h008a9733;		@(posedge clk);
 		// slt a1, s4, a2
-		instruction <= 32'h00ca25b3;		@(posedge clk);  /* alu_signal = 5'b01110;	
-																			rs1 = instruction [19:15] rs2 = instruction [24:20] */
+		instruction <= 32'h00ca25b3;		@(posedge clk);
 		// sltu a1, s4, a2
-		instruction <= 32'h00ca35b3;		@(posedge clk);  /* alu_signal = 5'b01110;	
-																			rs1 = instruction [19:15] rs2 = instruction [24:20] */
+		instruction <= 32'h00ca35b3;		@(posedge clk);
 		// xor a5, a4, a5
-		instruction <= 32'h00f747b3;		@(posedge clk); /* alu_signal = 5'b00100;	
-																			rs1 = instruction [19:15] rs2 = instruction [24:20] */
+		instruction <= 32'h00f747b3;		@(posedge clk);
 		// srl a0, a1, a2
-		instruction <= 32'h00c5d533;		@(posedge clk); /* alu_signal = 5'b00110;
-																			rs1 = instruction [19:15] rs2 = instruction [24:20] */
+		instruction <= 32'h00c5d533;		@(posedge clk);
 		// sra a0, a1, a2
-		instruction <= 32'h40c5d533;		@(posedge clk); /* alu_signal = 5'b00111; 
-																			rs1 = instruction [19:15] rs2 = instruction [24:20] */
+		instruction <= 32'h40c5d533;		@(posedge clk);
 		// or a7, a7, a2
-		instruction <= 32'h00c8e8b3;		@(posedge clk); /* alu_signal = 5'b00011
-																			rs1 = instruction [19:15] rs2 = instruction [24:20] */ 
+		instruction <= 32'h00c8e8b3;		@(posedge clk);
 		// and a4, a4, a5
-		instruction <= 32'h00f77733;		@(posedge clk); /* alu_signal = 5'b00010
-																			rs1 = instruction [19:15] rs2 = instruction [24:20] */ 
+		instruction <= 32'h00f77733;		@(posedge clk);
 		// addi sp, sp, -32
-		instruction <= 32'hfe010113;		@(posedge clk); /* mem_write = 1'b0; reg_write = 1'b1; 
-																			control_branch = 1'b0; jalr_branch = 1'b0; xfer_size = 2'bx;
-																			alu_signal = 5'b00000, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7]
-																			Don't care: rs2, imm_u_j */
+		instruction <= 32'hfe010113;		@(posedge clk);
 		// slti tp, t0, -96
-		instruction <= 32'hfa02a213;		@(posedge clk); /*alu_signal = 5'b01110, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7]
-																			Don't care: rs2, imm_u_j */
+		instruction <= 32'hfa02a213;		@(posedge clk);
 		// sltiu t0, t1, 1365
-		instruction <= 32'h55533293;		@(posedge clk); /*alu_signal = 5'b01111, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7]
-																			Don't care: rs2, imm_u_j */
+		instruction <= 32'h55533293;		@(posedge clk);
 		// xori s0, s1, 254
-		instruction <= 32'h0fe4c413;		@(posedge clk); /*alu_signal = 5'b00100, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7]
-																			Don't care: rs2, imm_u_j */
+		instruction <= 32'h0fe4c413;		@(posedge clk);
 		// ori x10, x11, 0x444
-		instruction <= 32'h4445e513;		@(posedge clk); /*alu_signal = 5'b00011, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7]
-																			Don't care: rs2, imm_u_j */
+		instruction <= 32'h4445e513;		@(posedge clk);
 		// andi a0, a1, 255
-		instruction <= 32'h0ff5f513;		@(posedge clk); /*alu_signal = 5'b00010;, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7]
-																			Don't care: rs2, imm_u_j */
+		instruction <= 32'h0ff5f513;		@(posedge clk);
 		// slli a6, a4, 0x2
-		instruction <= 32'h00271813;		@(posedge clk); /*alu_signal = 5'b00101;, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7]
-																			Don't care: rs2, imm_u_j */
+		instruction <= 32'h00271813;		@(posedge clk);
 		// srli a3, a4 0x2
-		instruction <= 32'h00275693;		@(posedge clk); /*alu_signal = 5'b00110;, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7] */
-																			
+		instruction <= 32'h00275693;		@(posedge clk);
 		// srai s2, s2, 0x2
-		instruction <= 32'h40295913;		@(posedge clk); /*alu_signal = 5'b00111;, 
-																			imm_en = 2'b01, imm = instruction[31:20];
-																			rs1 = instruction [19:15], rd = instruction[11:7]
-																			Don't care: rs2, imm_u_j */
+		instruction <= 32'h40295913;		@(posedge clk);
 		// beq a0, a2, 10518
-		instruction <= 32'h02d50463;		@(posedge clk); /*mem_write = 1'b0; reg_write = 1'b0; 
-																			control_branch = 1'b1; jalr_branch = 1'b0; xfer_size = 2'bx;
-																			alu_signal = 5'b01000;
-																			imm_en = 2'b01;
-																			imm[11] 		= instruction[31];
-																			imm[10]			= instruction[7];
-																			imm[9:4]		= instruction[30:25];
-																			imm[3:0]		= instruction[11:8];
-																			rs2				= instruction[24:20];
-																			rs1				= instruction[19:15];*/
+		instruction <= 32'h02d50463;		@(posedge clk);
 		// bne 
-		instruction <= 32'h01871463;		@(posedge clk); 	/* alu_signal = 5'b01001;
-																			imm_en = 2'b01;
-																			imm[11] 		= instruction[31];
-																			imm[10]			= instruction[7];
-																			imm[9:4]		= instruction[30:25];
-																			imm[3:0]		= instruction[11:8];
-																			rs2				= instruction[24:20];
-																			rs1				= instruction[19:15];*/
+		instruction <= 32'h01871463;		@(posedge clk);
 		// blt a6, a4, 1053c
-		instruction <= 32'h06e84e63;		@(posedge clk); /* alu_signal = 5'b01010;
-																			imm_en = 2'b01;
-																			imm[11] 		= instruction[31];
-																			imm[10]			= instruction[7];
-																			imm[9:4]		= instruction[30:25];
-																			imm[3:0]		= instruction[11:8];
-																			rs2				= instruction[24:20];
-																			rs1				= instruction[19:15];*/
+		instruction <= 32'h06e84e63;		@(posedge clk);
 		// bge t1, a2, 10284
-		instruction <= 32'h02c37e63;		@(posedge clk);  /* alu_signal = 5'b01011;
-																			imm_en = 2'b01;
-																			imm[11] 		= instruction[31];
-																			imm[10]			= instruction[7];
-																			imm[9:4]		= instruction[30:25];
-																			imm[3:0]		= instruction[11:8];
-																			rs2				= instruction[24:20];
-																			rs1				= instruction[19:15];*/
+		instruction <= 32'h02c37e63;		@(posedge clk);
 		// bltu a4, a3, 10264
-		instruction <= 32'hfed766e3;		@(posedge clk); /* alu_signal = 5'b01100;
-																			imm_en = 2'b01;
-																			imm[11] 		= instruction[31];
-																			imm[10]			= instruction[7];
-																			imm[9:4]		= instruction[30:25];
-																			imm[3:0]		= instruction[11:8];
-																			rs2				= instruction[24:20];
-																			rs1				= instruction[19:15];*/
+		instruction <= 32'hfed766e3;		@(posedge clk);
 		// bgeu zero, a6, 14
-		instruction <= 32'h01007663;		@(posedge clk); /* alu_signal = 5'b01101;
-																			imm_en = 2'b01;
-																			imm[11] 		= instruction[31];
-																			imm[10]			= instruction[7];
-																			imm[9:4]		= instruction[30:25];
-																			imm[3:0]		= instruction[11:8];
-																			rs2				= instruction[24:20];
-																			rs1				= instruction[19:15];*/
-
+		instruction <= 32'h01007663;		@(posedge clk);
 		// lui a5, 0x11
-		instruction <= 32'h000117b7;		@(posedge clk); /* mem_write = 1'b0; reg_write = 1'b1; 
-																			alu_signal = 5'b10001; jalr_branch = 1'b0; xfer_size = 2'bx; 
-																			imm_en = 2'b10;
-																			imm_U_J			= instruction[31:12];
-																			rd				= instruction[11:7]; */
-																			
-		// aupic t0, 0x0	
-		instruction <= 32'h00000297;		@(posedge clk);  /*  alu_signal = 5'b10010
-																				imm_U_J		= instruction[31:12];
-																				rd				= instruction[11:7]; */
-																				
+		instruction <= 32'h000117b7;		@(posedge clk);
+		// auipc t0, 0x0
+		instruction <= 32'h00000297;		@(posedge clk);
 		// jal ra, 10240
-		instruction <= 32'h19c000ef;		@(posedge clk); /* mem_write = 1'b0; reg_write = 1'b1;
-																				alu_signal = 5'b10000; jalr_branch = 1'b0; xfer_size = 2'bx;
-																				imm_en			= 2'b11;
-																				imm_U_J[19]		= instruction[31];
-																				imm_U_J[9:0]	= instruction[30:21];
-																				imm_U_J[10]		= instruction[20];
-																				imm_U_J[18:11]	= instruction[19:12];
-																				rd				= instruction[11:7]; */ 
+		instruction <= 32'h19c000ef;		@(posedge clk);
 		// jalr zero #0
-		instruction <= 32'h000000e7;		@(posedge clk); /* mem_write = 1'b0; reg_write = 1'b1;
-																				alu_signal = 5'b10000; jalr_branch = 1'b1; xfer_size = 2'bx;
-																			imm_en 			= 2'b01;
-																			imm 			= instruction[31:20];
-																			rs1 			= instruction[19:15];
-																			funct_3 			= instruction[14:12];
-																			rd 				= instruction[11:7]; */
+		instruction <= 32'h000000e7;		@(posedge clk);
 		// lb a0, 4(a1)
-		instruction <= 32'h00458503;		@(posedge clk); /* mem_write = 1'b1; reg_write = 1'b1; 
-																			alu_signal = ALU_ADD_I; control_branch = 1'b0; jalr_branch = 1'b0;
-																			xfer_size = 2'b00
-																			imm_en 			= 2'b01;
-																			imm 			= instruction[31:20];
-																			rs1 			= instruction[19:15];
-																			funct_3 			= instruction[14:12];
-																			rd 				= instruction[11:7]; */
+		instruction <= 32'h00458503;		@(posedge clk);
 		// lh a0, 4(a1)
-		instruction <= 32'h00459503;		@(posedge clk); /* alu_signal = xfer_size = 2'b01
-																			imm_en 			= 2'b01;
-																			imm 			= instruction[31:20];
-																			rs1 			= instruction[19:15];
-																			funct_3 			= instruction[14:12];
-																			rd 				= instruction[11:7]; */
+		instruction <= 32'h00459503;		@(posedge clk);
 		// lw a0, 0(sp)
-		instruction <= 32'h00012503;		@(posedge clk); /* alu_signal = 5'b00000, xfer_size = 2'b10
-																			imm_en 		= 2'b01;
-																			imm 			= instruction[31:20];
-																			rs1 			= instruction[19:15];
-																			funct_3 		= instruction[14:12];
-																			rd 			= instruction[11:7]; */
+		instruction <= 32'h00012503;		@(posedge clk);
 		// lbu a4, -972(gp)
-		instruction <= 32'hc341c703;		@(posedge clk); /* alu_signal = 5'b00000, xfer_size = 2'b00
-																			imm_en 		= 2'b01;
-																			imm 			= instruction[31:20];
-																			rs1 			= instruction[19:15];
-																			funct_3 		= instruction[14:12];
-																			rd 			= instruction[11:7]; */
+		instruction <= 32'hc341c703;		@(posedge clk);
 		// lhu a0, 4(a1)
-		instruction <= 32'h0045d503;		@(posedge clk); /* alu_signal = 5'b00000, xfer_size = 2'b01
-																			imm_en 		= 2'b01;
-																			imm 			= instruction[31:20];
-																			rs1 			= instruction[19:15];
-																			funct_3 		= instruction[14:12];
-																			rd 			= instruction[11:7]; */
+		instruction <= 32'h0045d503;		@(posedge clk);
 		// sb a1, 1(a4)
-		instruction <= 32'h00b700a3;		@(posedge clk);  /* imm_en 			= 2'b01; 
-																				imm[11:5]		= instruction[31:15];
-																				imm[4:0]		= instruction[11:7];  
-																				rs2				= instruction[24:20]; 
-																				rs1				= instruction[19:15];  
-																				mem_write = 1'b1; reg_write = 1'b0; 
-																			alu_signal = 5'b00000; control_branch = 1'b0; jalr_branch = 1'b0;
-																			xfersize = 2'b00; */ 
-																			
+		instruction <= 32'h00b700a3;		@(posedge clk);
 		// sh a0, 0(a1)
-		instruction <= 32'h00a59023;		@(posedge clk); /* imm[11:5]		= instruction[31:15];
-																				imm[4:0]		= instruction[11:7];  
-																				rs2				= instruction[24:20]; 
-																				rs1				= instruction[19:15];  
-																				mem_write = 1'b1; reg_write = 1'b0; 
-																			alu_signal = 5'b00000; control_branch = 1'b0; jalr_branch = 1'b0;
-																			xfersize = 2'b01; */ 
+		instruction <= 32'h00a59023;		@(posedge clk);
 		// sw s0, 0(a0)
-		instruction <= 32'h00852023;		@(posedge clk); /* imm[11:5]		= instruction[31:15];
-																				imm[4:0]		= instruction[11:7];  
-																				rs2				= instruction[24:20]; 
-																				rs1				= instruction[19:15];  
-																				mem_write = 1'b1; reg_write = 1'b0; 
-																			alu_signal = 5'b00000; control_branch = 1'b0; jalr_branch = 1'b0;
-																			xfersize = 2'b10; */ 
+		instruction <= 32'h00852023;		@(posedge clk);
 		// sbu
 		// shu
-		$stop;
+		$finish;
 	end
 
 endmodule
+
