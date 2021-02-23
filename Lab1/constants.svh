@@ -27,6 +27,7 @@ localparam [9:0]ADD = 10'b0000000000;
 localparam [9:0]SUB = 10'b0100000000;
 localparam [9:0]SLL = 10'b0000000001;
 localparam [9:0]SLT = 10'b0000000010;
+localparam [9:0]SLTU = 10'b0000000011;
 localparam [9:0]XOR = 10'b0000000100;
 localparam [9:0]SRL = 10'b0000000101;
 localparam [9:0]SRA = 10'b0100000101;
@@ -101,8 +102,8 @@ localparam [1:0]ALU_READ_IMM_U		= 2'b10;
 localparam [1:0]ALU_READ_IMM_J		= 2'b11;
 
 // xfer_size
-localparam [2:0]XFER_BYTE 	= 3'b000;
-localparam [2:0]XFER_HALF	= 3'b001;
-localparam [2:0]XFER_WORD	= 3'b010;
+localparam [1:0]XFER_BYTE 	= 2'b00;
+localparam [1:0]XFER_HALF	= 2'b01;
+localparam [1:0]XFER_WORD	= 2'b10;
 
 
