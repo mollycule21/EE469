@@ -2,20 +2,21 @@
 // register_file.sv  output read_out_1 = input write_data 
 // 
 
-`define NUMBER_OF_WORDS	2048		// number of words in data memory	
+`define NUMBER_OF_WORDS	32		// number of words in data memory	
 `define WORD_SIZE			32
 `define HALF_WORD			16
 
 module data_memory(clk, reset, read_en, address, xfer_size, write_en, write_data, read_data);
 	`include "constants.svh"
-
+	
 	input logic clk, reset;
 	input logic [`WORD_SIZE - 1:0]address;
 	input logic read_en, write_en;
 	input logic [2:0]xfer_size;
 	input logic [`WORD_SIZE - 1:0]write_data;
 	output logic [`WORD_SIZE - 1:0]read_data;
-
+	
+	
 	// data memory size in bytes
 	localparam data_memory_size = `WORD_SIZE * `NUMBER_OF_WORDS;
 
@@ -26,26 +27,30 @@ module data_memory(clk, reset, read_en, address, xfer_size, write_en, write_data
 
 	// set everything in data memory to 0
 	logic [31:0] j;
-	initial begin
+	/* initial begin
 		for (j = 0; j < `NUMBER_OF_WORDS; j = j + 1) begin
-			// data_memory[i] = 32'd0; // uncomment when not hardcode testing 
-			if (j == 8) begin // hardcode start 
-				temp_memory[j] = {8'b01010101}; 
-			end else if (j == 16) begin 
-				temp_memory[j + 1'b1] = {8'b01010101};
-				temp_memory[j] = {8'b00110011}; 
-			end else if (j == 20) begin 
-				temp_memory[j+3] = {5'd0, 3'b111}; 
-				temp_memory[j+2] = {6'd0, 2'b11};
-				temp_memory[j+1] = {7'd0, 1'b1}; 
-				temp_memory[j]   = {8'd0}; 
-			end else begin 
-				temp_memory[j] = 32'd0; 
-			end  // hardcode end 
+			 data_memory[j] = 32'd0; // uncomment when not hardcode testing 
+//			if (j == 8) begin // hardcode start 
+//				temp_memory[j] = {8'b01010101}; 
+//			end else if (j == 16) begin 
+//				temp_memory[j + 1'b1] = {8'b01010101}; //17
+//				// temp_memory[j] = {8'b00110011}; //16
+//			end else if (j == 20) begin 
+//				temp_memory[j+3] = {5'd0, 3'b111}; 
+//				temp_memory[j+2] = {6'd0, 2'b11};
+//				temp_memory[j+1] = {7'd0, 1'b1}; 
+//				temp_memory[j]   = {8'd0}; 
+//			end else begin 
+//				temp_memory[j] = 32'd0; 
+//			end  // hardcode end 
 		end
 		
-	end
-	 
+	end */
+	
+	initial begin 
+		$readmemb("data_memory_test.txt", data_memory);
+	end 
+	
 	// integer i; 
 	
 	// DFF logic for read operation
@@ -55,17 +60,17 @@ module data_memory(clk, reset, read_en, address, xfer_size, write_en, write_data
 
 		if (reset) begin
 			// set everything in data memory to 0
-//			for (i = 0; i < `NUMBER_OF_WORDS; i = i + i) begin
-//				data_memory[i] <= 8'd0;
-//			end
-			data_memory = temp_memory;
+			for (j = 0; j < `NUMBER_OF_WORDS; j = j + j) begin
+				data_memory[j] <= 8'd0;
+			end
+			// data_memory = temp_memory;
 		// consider each size scenario
 		end else if (read_en && (xfer_size == XFER_BYTE)) begin
 			read_data[`WORD_SIZE - 1:8] 	<= 24'd0;
 			read_data[7:0] 					<= data_memory[address];
 		
 		end else if (read_en && (xfer_size == XFER_HALF)) begin
-			read_data <= {16'd0, data_memory[address + 32'd1], data_memory[address]};
+			read_data <= {16'd0, data_memory[address], data_memory[(address + 32'd1)]};
 		
 		end else if (read_en && (xfer_size == XFER_WORD)) begin // 4 bytes total
 			read_data					<= {data_memory[address + 32'd3], 
@@ -113,7 +118,10 @@ module data_memory_tb();
 	logic [`WORD_SIZE - 1:0]write_data;
 	logic [`WORD_SIZE - 1:0]read_data;
 	
+	
+	
 	data_memory dut (.clk, .reset, .read_en, .address, .xfer_size, .write_en, .write_data, .read_data);
+
 	
 	parameter CLOCK_PERIOD = 100; 
 	
@@ -140,7 +148,7 @@ module data_memory_tb();
 		reset <= 0;													@(posedge clk); 	
 		
 								read_en <= 0; write_en <= 0; 	@(posedge clk); // read_data = don't care 
-								read_en <= 1; 						 @(posedge clk); // read_data = {16'd0, 8'b01010101,8'b00110011};
+								read_en <= 1; 						@(posedge clk); // read_data = {16'd0, 8'b01010101,8'b00110011};
 												  write_en <= 1; 	@(posedge clk); /* read_data = 32'dx, data_memory[17] = 8'b11110000, 
 																															data_memory[16] = 8'b10101010; */
 								read_en <= 0; write_en <= 0;	@(posedge clk);		  		
