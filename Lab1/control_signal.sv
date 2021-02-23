@@ -152,7 +152,7 @@ module control_signal(instruction, mem_write, reg_write,
 			default:alu_signal = 5'bx;
 			endcase	
 		end	
- 		op-imm: begin
+ 		op_imm: begin
 			mem_write = 1'b0; reg_write = 1'b1; 
 			control_branch = 1'b0; jalr_branch = 1'b0;
 			xfer_size = 2'bx;
@@ -272,9 +272,82 @@ module control_signal_tb();
 
 	// tests
 	initial begin
+		// add a3, a3, t0
+		instruction <= 32'h005686b3;		@(posedge clk);
+		// sub a5, a5, s0
+		instruction <= 32'h408787b3;		@(posedge clk);
+		// sll a4, s5, s0
+		instruction <= 32'h008a9733;		@(posedge clk);
+		// slt a1, s4, a2
+		instruction <= 32'h00ca25b3;		@(posedge clk);
+		// sltu a1, s4, a2
+		instruction <= 32'h00ca35b3;		@(posedge clk);
+		// xor a5, a4, a5
+		instruction <= 32'h00f747b3;		@(posedge clk);
+		// srl a0, a1, a2
+		instruction <= 32'h00c5d533;		@(posedge clk);
+		// sra a0, a1, a2
+		instruction <= 32'h40c5d533;		@(posedge clk);
+		// or a7, a7, a2
+		instruction <= 32'h00c8e8b3;		@(posedge clk);
+		// and a4, a4, a5
+		instruction <= 32'h00f77733;		@(posedge clk);
 		// addi sp, sp, -32
 		instruction <= 32'hfe010113;		@(posedge clk);
-											@(posedge clk);
+		// slti tp, t0, -96
+		instruction <= 32'hfa02a213;		@(posedge clk);
+		// sltiu t0, t1, 1365
+		instruction <= 32'h55533293;		@(posedge clk);
+		// xori s0, s1, 254
+		instruction <= 32'h0fe4c413;		@(posedge clk);
+		// ori x10, x11, 0x444
+		instruction <= 32'h4445e513;		@(posedge clk);
+		// andi a0, a1, 255
+		instruction <= 32'h0ff5f513;		@(posedge clk);
+		// slli a6, a4, 0x2
+		instruction <= 32'h00271813;		@(posedge clk);
+		// srli a3, a4 0x2
+		instruction <= 32'h00275693;		@(posedge clk);
+		// srai s2, s2, 0x2
+		instruction <= 32'h40295913;		@(posedge clk);
+		// beq a0, a2, 10518
+		instruction <= 32'h02d50463;		@(posedge clk);
+		// bne 
+		instruction <= 32'h01871463;		@(posedge clk);
+		// blt a6, a4, 1053c
+		instruction <= 32'h06e84e63;		@(posedge clk);
+		// bge t1, a2, 10284
+		instruction <= 32'h02c37e63;		@(posedge clk);
+		// bltu a4, a3, 10264
+		instruction <= 32'hfed766e3;		@(posedge clk);
+		// bgeu zero, a6, 14
+		instruction <= 32'h01007663;		@(posedge clk);
+		// lui a5, 0x11
+		instruction <= 32'h000117b7;		@(posedge clk);
+		// auipc t0, 0x0
+		instruction <= 32'h00000297;		@(posedge clk);
+		// jal ra, 10240
+		instruction <= 32'h19c000ef;		@(posedge clk);
+		// jalr zero #0
+		instruction <= 32'h000000e7;		@(posedge clk);
+		// lb a0, 4(a1)
+		instruction <= 32'h00458503;		@(posedge clk);
+		// lh a0, 4(a1)
+		instruction <= 32'h00459503;		@(posedge clk);
+		// lw a0, 0(sp)
+		instruction <= 32'h00012503;		@(posedge clk);
+		// lbu a4, -972(gp)
+		instruction <= 32'hc341c703;		@(posedge clk);
+		// lhu a0, 4(a1)
+		instruction <= 32'h0045d503;		@(posedge clk);
+		// sb a1, 1(a4)
+		instruction <= 32'h00b700a3;		@(posedge clk);
+		// sh a0, 0(a1)
+		instruction <= 32'h00a59023;		@(posedge clk);
+		// sw s0, 0(a0)
+		instruction <= 32'h00852023;		@(posedge clk);
+		// sbu
+		// shu
 		$finish;
 	end
 
