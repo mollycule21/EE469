@@ -25,14 +25,14 @@ module branch_adder(clk, pc, imm, imm_U_J, imm_en, pc_out);
 		case(imm_en)
 		ALU_READ_IMM: begin // corresponds to all the branch instructions
 			// sign extending immediate
-			if (imm_sign) temp[`WORD_SIZE - 1:13] = 19'b1;
+			if (imm_sign) temp[`WORD_SIZE - 1:13] = 19'b1111111111111111111;
 			else temp[`WORD_SIZE - 1:13] = 19'b0;
 
 			temp[12:0] = {imm, 1'b0};  
 		end
 		ALU_READ_IMM_J: begin // corresponds to jal instruction 
 			// sign extending immediate
-			if (imm_J_sign) temp[`WORD_SIZE - 1:21] = 11'b1;
+			if (imm_J_sign) temp[`WORD_SIZE - 1:21] = 11'b11111111111;
 			else temp[`WORD_SIZE - 1:21] = 11'b0;
 
 			temp[20:0] = {imm_U_J, 1'b0};

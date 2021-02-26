@@ -106,4 +106,8 @@ localparam [1:0]XFER_BYTE 	= 2'b00;
 localparam [1:0]XFER_HALF	= 2'b01;
 localparam [1:0]XFER_WORD	= 2'b10;
 
+// register file write select
+localparam [1:0]REG_WR_OFF  = 2'b00;
+localparam [1:0]REG_WR_ALU  = 2'b01;
+localparam [1:0]REG_WR_MEM  = 2'b10;
 
