@@ -62,7 +62,8 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 			sorted_in_2[`WORD_SIZE - 1:12] = imm_U_J_delay; 
 			sorted_in_2[11:0] = 12'd0;
 		end
-		ALU_READ_IMM_J: begin
+		default: begin
+			sorted_in_2 = 32'b0;
 		end
 		endcase
 	end
@@ -163,6 +164,10 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 			ALU_AUIPC: begin
 				take_branch <= 1;
 				out <= pc_delay + sorted_in_2;
+			end
+			default: begin
+				take_branch <= 1'bx;
+				out <= 32'bx;
 			end
 			endcase
 		end

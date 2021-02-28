@@ -2,15 +2,22 @@
 // register_file.sv  output read_out_1 = input write_data 
 // 
 
-`define NUMBER_OF_WORDS	    1024		// number of words in data memory	
+`define NUMBER_OF_WORDS	    2048		// number of words in data memory	
 `define WORD_SIZE			32
 `define HALF_WORD			16
+`define IO_ADDRESS_HIGH		32'h0002ffff
+`define IO_ADDRESS_LOW		32'h0002fff0
+`define TESTING
+`define INPUT_FILE			"./assets/data_new.hex"
 
 // for store operations:
 // data is from rs2, so write data should be connected to rs2
-// for load operations:
-// 
-module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en, write_data, read_data);
+
+
+// 0x0000 8000 - 0x0000 ffff is for initialized data
+// 0x0001 0000 - 0x0001 7fff is for stack (and i guess heap)
+// 0x0002 fff0 - 0x0002 ffff is for io operations
+module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en, write_data, read_data, serial_txd);
 	`include "constants.svh"
 	
 	input logic clk, reset;
@@ -20,7 +27,13 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 	input logic [1:0]xfer_size;
 	input logic [`WORD_SIZE - 1:0]write_data;
 	output logic [`WORD_SIZE - 1:0]read_data;
-	
+	output logic serial_txd;
+
+	// address offset
+	localparam offset = 32'h8000;
+	logic [`WORD_SIZE - 1:0]address_after_offset;
+	assign address_after_offset = address - offset;
+
 	// buffer the inputs for three clock cycles
 	logic read_en_delay_1, read_en_delay_2;
 	logic write_en_delay_1, write_en_delay_2;
@@ -52,63 +65,92 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 
 	// initialize data memory
 	logic [7:0] data_memory [data_memory_size - 1:0];
+	initial $readmemh(`INPUT_FILE, data_memory);
 	
+	// serial transmitter for io operations
+	logic [7:0]serial_tx_data;
+	logic tx_data_available, serial_tx_ready;
+`ifndef TESTING
+	serial_transmitter serial_out(.clock(clk), .reset(reset), .tx_data(serial_tx_data), 
+									.tx_data_available(tx_data_available), 
+									.tx_ready(serial_tx_ready),
+									.serial_tx(serial_txd));
+`endif
+
+
 	// DFF logic for read operation
 	always_ff@(posedge clk) begin
-		// make sure address is not out of bound
 	//	assert(address <= data_memory_size); // assert: whatever inside (), has to be met, or will output error 
 
 		if (reset) begin
+			serial_tx_data <= 8'bx;
+			tx_data_available <= 1'b0;
+		end else if (write_en_delay_2 && (address >= `IO_ADDRESS_LOW) 
+										&& (address <= `IO_ADDRESS_HIGH)) begin
+`ifdef TESTING
+			$write("printf: %02h", write_data_delay_1[7:0]);
+`else
+			tx_data_available 	<= 1'b1;
+			serial_tx_data 		<= write_data_delay_1[7:0];
+`endif
 		end else if (read_en_delay_2) begin
+			serial_tx_data <= 8'bx;
+			tx_data_available <= 1'b0;
+
 			case(xfer_size_delay_2)
 			XFER_BYTE: begin
 				// check for signess
-				if (data_memory[address][7] && is_signed_delay_2) 
+				if (data_memory[address_after_offset][7] && is_signed_delay_2) 
 					read_data[`WORD_SIZE - 1:8] <= 24'hffffff;
 				else read_data[`WORD_SIZE - 1:8] 	<= 24'b0;
 
-					read_data[7:0] 					<= data_memory[address];
+					read_data[7:0] 					<= data_memory[address_after_offset];
 			end
 			XFER_HALF: begin
 				// check for signess
-				if (data_memory[address + 32'd1][7] && is_signed_delay_2) begin
+				if (data_memory[address_after_offset+ 32'd1][7] && is_signed_delay_2) begin
 					read_data[`WORD_SIZE - 1:16] <= 16'hffff;
 				end else begin
 					read_data[`WORD_SIZE - 1:16] <= 16'b0;
 				end
 
-				read_data[15:0] <= {data_memory[address + 32'd1], 
-									data_memory[address]};
+				read_data[15:0] <= {data_memory[address_after_offset + 32'd1], 
+									data_memory[address_after_offset]};
 			end
 			XFER_WORD: begin
-				read_data						<= {data_memory[address + 32'd3], 
-													data_memory[address + 32'd2], 
-													data_memory[address + 32'd1], 
-													data_memory[address]};
+				read_data						<= {data_memory[address_after_offset + 32'd3], 
+													data_memory[address_after_offset + 32'd2], 
+													data_memory[address_after_offset + 32'd1], 
+													data_memory[address_after_offset]};
 			end
 			default: read_data <= 32'bx;
 			endcase
 		end else if (write_en_delay_2) begin
+			serial_tx_data <= 8'bx;
+			tx_data_available <= 1'b0;
+
 			case(xfer_size_delay_2)
 			XFER_BYTE: begin
-				data_memory[address]			<= write_data_delay_1[7:0];
+				data_memory[address_after_offset]			<= write_data_delay_1[7:0];
 				read_data <= 32'bx;
 			end
 			XFER_HALF: begin 
-				data_memory[address]			<= write_data_delay_1[7:0];
-				data_memory[address + 32'd1]	<= write_data_delay_1[15:8];
+				data_memory[address_after_offset]			<= write_data_delay_1[7:0];
+				data_memory[address_after_offset + 32'd1]	<= write_data_delay_1[15:8];
 				read_data <= 32'bx;
 			end
 			XFER_WORD: begin
-				data_memory[address]			<= write_data_delay_1[7:0];
-				data_memory[address + 32'd1]	<= write_data_delay_1[15:8];
-				data_memory[address + 32'd2]	<= write_data_delay_1[23:16];
-				data_memory[address + 32'd3]  	<= write_data_delay_1[31:24];
+				data_memory[address_after_offset]			<= write_data_delay_1[7:0];
+				data_memory[address_after_offset + 32'd1]	<= write_data_delay_1[15:8];
+				data_memory[address_after_offset + 32'd2]	<= write_data_delay_1[23:16];
+				data_memory[address_after_offset + 32'd3]  	<= write_data_delay_1[31:24];
 				read_data <= 32'bx;
 			end
 			default: read_data <= 32'bx;
 			endcase
 		end else begin
+			serial_tx_data <= 8'bx;
+			tx_data_available <= 1'b0;
 			read_data <= 32'bx;
 		end 
 	end 

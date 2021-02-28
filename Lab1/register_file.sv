@@ -1,6 +1,6 @@
 
 `define NUMBER_OF_REGS		32
-`define wr_reg(arg) arg+0
+`define INPUT_FILE			"./assets/register_test.txt"	
 
 module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg, 
 						alu_wr_data, mem_wr_data, wr_en, read_out_1, read_out_2);
@@ -15,19 +15,11 @@ module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg,
 	// define regfile 
 	logic[31:0] register [`NUMBER_OF_REGS - 1:0];
 	
-	// initialize regfile to all 0 
-//	genvar i;
-//	generate 
-//		for (i = 0; i < `NUMBER_OF_REGS; i = i + 1) begin 
-//			register[i] = 32'd0;
-//		end 
-//	endgenerate 
-
 	// make sure x0 is always 0
 	// assign register[0] = 32'd0;
 
 	initial begin
-		$readmemb("../assets/register.txt", register);
+		$readmemb(`INPUT_FILE, register);
 	end
 
 	// need to buffer wr_en for three clock cycles
@@ -56,15 +48,23 @@ module register_file (clk, reset, read_reg_1, read_reg_2, wr_reg,
 	always_ff@(posedge clk) begin 
 		if (reset) begin
 			//for (int i = 0; i < `NUMBER_OF_REGS; i = i + 1) begin
-			//	register[i] <= 32'd0;
+			//	if (i == 2) register[i] <= 32'h00017fff;
+			//	else register[i] <= 32'd0;
 			//end
+		end else if (wr_en == REG_WR_OFF) begin
+			read_out_1 <= register[read_reg_1];
+			read_out_2 <= register[read_reg_2];
+		end else if ((wr_en_temp_3 == REG_WR_ALU ||
+						wr_en_temp_3 == REG_WR_MEM)
+						&& wr_reg_temp_3 == 5'b0) begin
+			register[wr_reg_temp_3] <= 32'b0;
 		end else if (wr_en_temp_3 == REG_WR_ALU) begin 
 			register[wr_reg_temp_3] <= alu_wr_data_temp; 
 		end else if (wr_en_temp_3 == REG_WR_MEM) begin
 			register[wr_reg_temp_3] <= mem_wr_data;
 		end else begin
-			read_out_1 <= register[read_reg_1];
-			read_out_2 <= register[read_reg_2];
+			read_out_1 <= 32'bx;
+			read_out_2 <= 32'bx;
 		end
 	end 
 

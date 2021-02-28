@@ -95,7 +95,7 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 		end
 		
 		INSTRUCTION_TYPE_B: begin
-			imm_en 			= ALU_READ_IMM;
+			imm_en 			= ALU_READ_RS2;
 			imm[11] 		= instruction[31];
 			imm[10]			= instruction[7];
 			imm[9:4]		= instruction[30:25];
@@ -126,7 +126,7 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 		default: begin
 			funct_3			= 3'bx;
 			funct_7			= 7'bx;
-			imm_en 			= 5'bx;
+			imm_en 			= 2'bx;
 			imm_U_J			= 20'bx;
 			imm				= 12'bx;
 			rd				= 5'bx;
@@ -259,7 +259,7 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 			data_mem_signed = 1'b0;
 		end
 		default: begin
-			mem_read = 1'bx; mem_write = 1'bx; reg_write = 1'bx;
+			mem_read = 1'bx; mem_write = 1'bx; reg_write = 2'bx;
 			jalr_branch = 1'bx; alu_signal = 5'bx; xfer_size = 2'bx;	
 			data_mem_signed = 1'bx;
 		end
