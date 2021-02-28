@@ -241,27 +241,27 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 		lui: begin 
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU; 
 			alu_signal = ALU_LUI; jalr_branch = 1'b0; xfer_size = 2'bx;
-			data_mem_signed = 1'b0;
+			control_branch = 1'b0; data_mem_signed = 1'b0;
 		end 
 		auipc: begin
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU;
 			alu_signal = ALU_AUIPC; jalr_branch = 1'b0; xfer_size = 2'bx;
-			data_mem_signed = 1'b0;
+			control_branch = 1'b1; data_mem_signed = 1'b0;
 		end
 		jal: begin
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU;
 			alu_signal = ALU_JAL_R; jalr_branch = 1'b0; xfer_size = 2'bx;
-			data_mem_signed = 1'b0;
+			control_branch = 1'b1; data_mem_signed = 1'b0;
 		end
 		jalr: begin
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU;
 			jalr_branch = 1'b1; alu_signal = ALU_ADD_I; xfer_size = 2'bx;	
-			data_mem_signed = 1'b0;
+			control_branch = 1'b0; data_mem_signed = 1'b0;
 		end
 		default: begin
 			mem_read = 1'bx; mem_write = 1'bx; reg_write = 2'bx;
 			jalr_branch = 1'bx; alu_signal = 5'bx; xfer_size = 2'bx;	
-			data_mem_signed = 1'bx;
+			control_branch = 1'bx; data_mem_signed = 1'bx;
 		end
  		endcase
 	end	
