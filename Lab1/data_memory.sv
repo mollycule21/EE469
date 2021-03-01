@@ -88,7 +88,7 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 		end else if (write_en_delay_2 && (address >= `IO_ADDRESS_LOW) 
 										&& (address <= `IO_ADDRESS_HIGH)) begin
 `ifdef TESTING
-			$write("printf: %02h", write_data_delay_1[7:0]);
+			$write("I/O: %02h\n", write_data_delay_1[7:0]);
 `else
 			tx_data_available 	<= 1'b1;
 			serial_tx_data 		<= write_data_delay_1[7:0];

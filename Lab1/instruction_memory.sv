@@ -5,7 +5,7 @@
 // Upduino only has 1Mb SPRAM, 120Kb DPRAM
 `define NUMBER_OF_INSTRUCTIONS	1024
 `define WORD_SIZE				32
-`define INPUT_FILE				"./assets/instruction_memory.txt"
+`define INPUT_FILE				"./assets/code.hex"
 
 module instruction_memory(clk, reset, address, instruction);
 	localparam address_size = $clog2(`NUMBER_OF_INSTRUCTIONS);
@@ -19,7 +19,7 @@ module instruction_memory(clk, reset, address, instruction);
 
 	// initialize binary memory file
 	initial $display("Loading instruction memory...");
-	initial $readmemb(`INPUT_FILE, instruction_memory);
+	initial $readmemh(`INPUT_FILE, instruction_memory);
 
 	// dff
 	always_ff@(posedge clk) begin

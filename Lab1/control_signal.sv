@@ -255,7 +255,7 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 		end
 		jalr: begin
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU;
-			jalr_branch = 1'b1; alu_signal = ALU_ADD_I; xfer_size = 2'bx;	
+			jalr_branch = 1'b1; alu_signal = ALU_JAL_R; xfer_size = 2'bx;	
 			control_branch = 1'b0; data_mem_signed = 1'b0;
 		end
 		default: begin

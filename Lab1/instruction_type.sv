@@ -40,11 +40,3 @@ module instruction_type(instruction, instruction_type, opcode);
 endmodule 
 
 
-module instruction_type_tb();
-
-
-
-
-
-
-endmodule
