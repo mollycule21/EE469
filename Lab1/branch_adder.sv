@@ -1,3 +1,4 @@
+// ADDED
 // adder for auipc and branch instructions
 `define WORD_SIZE		32
 
@@ -23,7 +24,7 @@ module branch_adder(clk, pc, imm, imm_U_J, imm_en, pc_out);
 	logic [`WORD_SIZE - 1:0]temp;
 	always_comb begin
 		case(imm_en)
-		ALU_READ_IMM: begin // corresponds to all the branch instructions
+		ALU_READ_RS2: begin // corresponds to all the branch instructions
 			// sign extending immediate
 			if (imm_sign) temp[`WORD_SIZE - 1:13] = 19'b1111111111111111111;
 			else temp[`WORD_SIZE - 1:13] = 19'b0;
@@ -41,7 +42,6 @@ module branch_adder(clk, pc, imm, imm_U_J, imm_en, pc_out);
 			temp = {imm_U_J, 12'b0};
 		end
 		default: temp = 32'b0;
-		
 		endcase
 	end 
 

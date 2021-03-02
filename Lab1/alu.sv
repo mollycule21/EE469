@@ -24,7 +24,7 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 
 	// logics for buffering
 	logic [4:0]control_delay;							// 3-bit control signal for ALU 
-	logic [`WORD_SIZE - 1:0]pc_delay;
+	logic [`WORD_SIZE - 1:0]pc_delay_1, pc_delay_2;
 	logic [1:0]imm_en_delay;
 	logic [11:0]imm_delay;
 	logic [19:0]imm_U_J_delay;
@@ -33,7 +33,8 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 	always_ff@(posedge clk) begin
 		control_delay <= control;
 
-		pc_delay <= pc;
+		pc_delay_1 <= pc;
+		pc_delay_2 <= pc_delay_1;
 		
 		imm_en_delay <= imm_en;
 
@@ -62,7 +63,8 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 			sorted_in_2[`WORD_SIZE - 1:12] = imm_U_J_delay; 
 			sorted_in_2[11:0] = 12'd0;
 		end
-		ALU_READ_IMM_J: begin
+		default: begin
+			sorted_in_2 = 32'b0;
 		end
 		endcase
 	end
@@ -72,6 +74,9 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 	always_comb begin
 		less_than_temp = in_1 - in_2;
 	end
+
+	logic signed [`WORD_SIZE - 1 :0]in_1_signed;
+	assign in_1_signed = in_1;
 
 	// dff logic
 	always_ff@(posedge clk) begin
@@ -109,7 +114,11 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 				take_branch <= 0; 
 			end 
 			ALU_SRA_I: begin 
-				out 		<= in_1 >>> sorted_in_2[4:0];
+				if (in_1[31]) begin
+					out <= in_1_signed >>> sorted_in_2[4:0];
+				end else begin
+					out <= in_1 >> sorted_in_2[4:0];
+				end
 				take_branch <= 0; 
 			end 
 			ALU_BEQ: begin	
@@ -154,7 +163,7 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 			end
 			ALU_JAL_R: begin
 				take_branch <= 1;
-				out <= pc_delay + 32'd4;
+				out <= pc_delay_2 + 32'd4;
 			end
 			ALU_LUI: begin
 				take_branch <= 0;
@@ -162,7 +171,11 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 			end
 			ALU_AUIPC: begin
 				take_branch <= 1;
-				out <= pc_delay + sorted_in_2;
+				out <= pc_delay_2 + sorted_in_2;
+			end
+			default: begin
+				take_branch <= 1'bx;
+				out <= 32'bx;
 			end
 			endcase
 		end

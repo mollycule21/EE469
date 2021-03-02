@@ -1,4 +1,3 @@
-
 `define WORD_SIZE	32
 
 // TODO: fix inputs on the testbench
@@ -95,7 +94,7 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 		end
 		
 		INSTRUCTION_TYPE_B: begin
-			imm_en 			= ALU_READ_IMM;
+			imm_en 			= ALU_READ_RS2;
 			imm[11] 		= instruction[31];
 			imm[10]			= instruction[7];
 			imm[9:4]		= instruction[30:25];
@@ -126,7 +125,7 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 		default: begin
 			funct_3			= 3'bx;
 			funct_7			= 7'bx;
-			imm_en 			= 5'bx;
+			imm_en 			= 2'bx;
 			imm_U_J			= 20'bx;
 			imm				= 12'bx;
 			rd				= 5'bx;
@@ -241,36 +240,32 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 		lui: begin 
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU; 
 			alu_signal = ALU_LUI; jalr_branch = 1'b0; xfer_size = 2'bx;
-			data_mem_signed = 1'b0;
+			control_branch = 1'b0; data_mem_signed = 1'b0;
 		end 
 		auipc: begin
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU;
 			alu_signal = ALU_AUIPC; jalr_branch = 1'b0; xfer_size = 2'bx;
-			data_mem_signed = 1'b0;
+			control_branch = 1'b1; data_mem_signed = 1'b0;
 		end
 		jal: begin
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU;
 			alu_signal = ALU_JAL_R; jalr_branch = 1'b0; xfer_size = 2'bx;
-			data_mem_signed = 1'b0;
+			control_branch = 1'b1; data_mem_signed = 1'b0;
 		end
 		jalr: begin
 			mem_read = 1'b0; mem_write = 1'b0; reg_write = REG_WR_ALU;
 			jalr_branch = 1'b1; alu_signal = ALU_ADD_I; xfer_size = 2'bx;	
-			data_mem_signed = 1'b0;
+			control_branch = 1'b0; data_mem_signed = 1'b0;
 		end
 		default: begin
-			mem_read = 1'bx; mem_write = 1'bx; reg_write = 1'bx;
+			mem_read = 1'bx; mem_write = 1'bx; reg_write = 2'bx;
 			jalr_branch = 1'bx; alu_signal = 5'bx; xfer_size = 2'bx;	
-			data_mem_signed = 1'bx;
+			control_branch = 1'bx; data_mem_signed = 1'bx;
 		end
  		endcase
 	end	
 
 endmodule
-
-
-
-
 
 //module control_signal_tb();
 //	`include "constants.svh"
@@ -310,9 +305,9 @@ endmodule
 //	// tests
 //	initial begin
 //		// add a3, a3, t0
-//		instruction <= 32'h005686b3;		@(posedge clk);
+//		instruction <= 32'h005686b3;		@(posedge clk); // register [13] = 1 + register[5] = 3 -> alu_output = 4 
 //		// sub a5, a5, s0
-//		instruction <= 32'h408787b3;		@(posedge clk);
+//		instruction <= 32'h408787b3;		@(posedge clk); 
 //		// sll a4, s5, s0
 //		instruction <= 32'h008a9733;		@(posedge clk);
 //		// slt a1, s4, a2

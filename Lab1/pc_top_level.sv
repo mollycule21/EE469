@@ -3,7 +3,7 @@
 
 
 module pc_top_level(clk, reset, imm, imm_U_J, imm_en,
-					register_for_jalr, alu_branch, control_branch, address_out);
+					register_for_jalr, alu_branch, control_branch, jalr_branch, address_out);
 	`include "constants.svh"
 	
 	input logic clk, reset;
