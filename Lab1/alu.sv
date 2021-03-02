@@ -45,7 +45,6 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 
 
 
-	logic sign;
 	logic [`WORD_SIZE - 1:0]sorted_in_2;
 	// this combinational logic act as the mux
 	always_comb begin
@@ -53,11 +52,13 @@ module alu(clk, reset, pc, control, in_1, in_2, imm, imm_U_J, imm_en, out, take_
 		ALU_READ_RS2:		sorted_in_2 = in_2;	
 		ALU_READ_IMM: begin
 			// sign extenting the immediate
-			sign = imm_delay[11];		// sign of the immediate
-			if (sign) sorted_in_2[`WORD_SIZE - 1:12] = 20'hfffff;
+			if (imm_delay[11]) sorted_in_2[`WORD_SIZE - 1:12] = 20'hfffff;
 			else sorted_in_2[`WORD_SIZE - 1:12] = 20'b0;
 
 			sorted_in_2[11:0] = imm_delay;
+		end
+		ALU_READ_IMM_J: begin
+			sorted_in_2 = 32'b0;
 		end
 		ALU_READ_IMM_U: begin
 			sorted_in_2[`WORD_SIZE - 1:12] = imm_U_J_delay; 
