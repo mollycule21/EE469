@@ -8,7 +8,10 @@
 `define IO_ADDRESS_HIGH		32'h0002ffff
 `define IO_ADDRESS_LOW		32'h0002fff0
 `define TESTING
-`define INPUT_FILE			"./assets/data_new.hex"
+`define DATA_FILE_0			"./assets/data0_extended.hex"
+`define DATA_FILE_1			"./assets/data1_extended.hex"
+`define DATA_FILE_2			"./assets/data2_extended.hex"
+`define DATA_FILE_3			"./assets/data3_extended.hex"
 
 // for store operations:
 // data is from rs2, so write data should be connected to rs2
@@ -32,29 +35,35 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 	// address offset
 	localparam offset = 32'h8000;
 	logic [`WORD_SIZE - 1:0]address_after_offset;
-	assign address_after_offset = address - offset;
+	assign address_after_offset = (address - offset)/4;
 
 	// buffer the inputs for three clock cycles
-	logic read_en_delay_1, read_en_delay_2;
+	logic [`WORD_SIZE - 1:0] address_delay;
+	logic read_en_delay_1, read_en_delay_2, read_en_delay_3;
 	logic write_en_delay_1, write_en_delay_2;
-	logic is_signed_delay_1, is_signed_delay_2;						
-	logic [1:0]xfer_size_delay_1, xfer_size_delay_2;
+	logic is_signed_delay_1, is_signed_delay_2, is_signed_delay_3;						
+	logic [1:0]xfer_size_delay_1, xfer_size_delay_2, xfer_size_delay_3;
 	logic [`WORD_SIZE - 1:0]write_data_delay_1;
 	
 
 	// dff delay
 	always_ff@(posedge clk) begin
+		address_delay <= address;
+
 		read_en_delay_1 <= read_en;
 		read_en_delay_2 <= read_en_delay_1;
+		read_en_delay_3 <= read_en_delay_2;
 
 		write_en_delay_1 <= write_en;
 		write_en_delay_2 <= write_en_delay_1;
 
 		is_signed_delay_1 <= is_signed;
 		is_signed_delay_2 <= is_signed_delay_1;
+		is_signed_delay_3 <= is_signed_delay_2;
 
 		xfer_size_delay_1 <= xfer_size;
 		xfer_size_delay_2 <= xfer_size_delay_1;
+		xfer_size_delay_3 <= xfer_size_delay_2;
 
 		write_data_delay_1 <= write_data;
 	end
@@ -64,8 +73,16 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 	localparam data_memory_size = `WORD_SIZE * `NUMBER_OF_WORDS;
 
 	// initialize data memory
-	logic [7:0] data_memory [data_memory_size - 1:0];
-	initial $readmemh(`INPUT_FILE, data_memory);
+	logic [7:0] data_memory_bank_0 [`NUMBER_OF_WORDS - 1:0];
+	logic [7:0] data_memory_bank_1 [`NUMBER_OF_WORDS - 1:0];
+	logic [7:0] data_memory_bank_2 [`NUMBER_OF_WORDS - 1:0];
+	logic [7:0] data_memory_bank_3 [`NUMBER_OF_WORDS - 1:0];
+	initial begin
+		$readmemh(`DATA_FILE_0, data_memory_bank_0);
+		$readmemh(`DATA_FILE_1, data_memory_bank_1);
+		$readmemh(`DATA_FILE_2, data_memory_bank_2);
+		$readmemh(`DATA_FILE_3, data_memory_bank_3);
+	end
 	
 	// serial transmitter for io operations
 	logic [7:0]serial_tx_data;
@@ -75,13 +92,8 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 									.tx_data_available(tx_data_available), 
 									.tx_ready(serial_tx_ready),
 									.serial_tx(serial_txd));
-`endif
-
-
-	// DFF logic for read operation
+`endif	
 	always_ff@(posedge clk) begin
-	//	assert(address <= data_memory_size); // assert: whatever inside (), has to be met, or will output error 
-
 		if (reset) begin
 			serial_tx_data <= 8'bx;
 			tx_data_available <= 1'b0;
@@ -93,65 +105,190 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 			tx_data_available 	<= 1'b1;
 			serial_tx_data 		<= write_data_delay_1[7:0];
 `endif
-		end else if (read_en_delay_2) begin
-			serial_tx_data <= 8'bx;
-			tx_data_available <= 1'b0;
-
-			case(xfer_size_delay_2)
-			XFER_BYTE: begin
-				// check for signess
-				if (data_memory[address_after_offset][7] && is_signed_delay_2) 
-					read_data[`WORD_SIZE - 1:8] <= 24'hffffff;
-				else read_data[`WORD_SIZE - 1:8] 	<= 24'b0;
-
-					read_data[7:0] 					<= data_memory[address_after_offset];
-			end
-			XFER_HALF: begin
-				// check for signess
-				if (data_memory[address_after_offset+ 32'd1][7] && is_signed_delay_2) begin
-					read_data[`WORD_SIZE - 1:16] <= 16'hffff;
-				end else begin
-					read_data[`WORD_SIZE - 1:16] <= 16'b0;
-				end
-
-				read_data[15:0] <= {data_memory[address_after_offset + 32'd1], 
-									data_memory[address_after_offset]};
-			end
-			XFER_WORD: begin
-				read_data						<= {data_memory[address_after_offset + 32'd3], 
-													data_memory[address_after_offset + 32'd2], 
-													data_memory[address_after_offset + 32'd1], 
-													data_memory[address_after_offset]};
-			end
-			default: read_data <= 32'bx;
-			endcase
-		end else if (write_en_delay_2) begin
-			serial_tx_data <= 8'bx;
-			tx_data_available <= 1'b0;
-
-			case(xfer_size_delay_2)
-			XFER_BYTE: begin
-				data_memory[address_after_offset]			<= write_data_delay_1[7:0];
-				read_data <= 32'bx;
-			end
-			XFER_HALF: begin 
-				data_memory[address_after_offset]			<= write_data_delay_1[7:0];
-				data_memory[address_after_offset + 32'd1]	<= write_data_delay_1[15:8];
-				read_data <= 32'bx;
-			end
-			XFER_WORD: begin
-				data_memory[address_after_offset]			<= write_data_delay_1[7:0];
-				data_memory[address_after_offset + 32'd1]	<= write_data_delay_1[15:8];
-				data_memory[address_after_offset + 32'd2]	<= write_data_delay_1[23:16];
-				data_memory[address_after_offset + 32'd3]  	<= write_data_delay_1[31:24];
-				read_data <= 32'bx;
-			end
-			default: read_data <= 32'bx;
-			endcase
 		end else begin
 			serial_tx_data <= 8'bx;
 			tx_data_available <= 1'b0;
-			read_data <= 32'bx;
+		end
+	end
+//`ifndef TESTING
+//    // Serial transmitter
+//    logic [7:0] serial_tx_data;
+//    logic serial_tx_data_available, serial_tx_ready;
+//    serial_transmitter serial_out (
+//      .clock                (clk),
+//      .reset                (reset),
+//      .tx_data              (serial_tx_data),
+//      .tx_data_available    (serial_tx_data_available),
+//      .tx_ready             (serial_tx_ready),
+//      .serial_tx            (serial_txd)
+//    );
+//
+//    // Dummy data to demonstrate serial transmission
+//    logic last_serial_tx_ready;
+//    assign serial_tx_data_available = write_en_delay_2
+//									& (address >= `IO_ADDRESS_LOW)
+//									& (address <= `IO_ADDRESS_HIGH);
+//
+//    always_ff @(posedge clk) begin
+//      if (reset) begin
+//        last_serial_tx_ready <= 1'b0;
+//      end else if (serial_tx_ready && !last_serial_tx_ready) begin
+//		serial_tx_data <= write_data_delay_1[7:0];
+//        last_serial_tx_ready <= serial_tx_ready;
+//      end else begin
+//        last_serial_tx_ready <= serial_tx_ready;
+//      end
+//    end
+//`endif
+
+
+
+
+	logic [31:0] bank_num;
+	assign bank_num = (address - offset) % 4;
+
+	logic [7:0] read_byte_bank_0,
+				read_byte_bank_1,
+				read_byte_bank_2,
+				read_byte_bank_3;
+
+	// read and write operations
+	always_ff@(posedge clk) begin
+		if (read_en_delay_2) begin
+			read_byte_bank_0 <= data_memory_bank_0[address_after_offset];
+			read_byte_bank_1 <= data_memory_bank_1[address_after_offset];
+			read_byte_bank_2 <= data_memory_bank_2[address_after_offset];
+			read_byte_bank_3 <= data_memory_bank_3[address_after_offset];
+		end else if (write_en_delay_2 && xfer_size_delay_2 == XFER_BYTE
+			&& (address < `IO_ADDRESS_LOW || address > `IO_ADDRESS_HIGH)) begin
+				if (bank_num == 0) begin
+					data_memory_bank_0[address_after_offset] <= write_data_delay_1[7:0];
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end else if (bank_num == 1) begin
+					data_memory_bank_1[address_after_offset] <= write_data_delay_1[7:0];
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end else if (bank_num == 2) begin
+					data_memory_bank_2[address_after_offset] <= write_data_delay_1[7:0];
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end else if (bank_num == 3) begin
+					data_memory_bank_3[address_after_offset] <= write_data_delay_1[7:0];
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end else begin
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end
+		end else if (write_en_delay_2 && xfer_size_delay_2 == XFER_HALF
+			&& (address < `IO_ADDRESS_LOW || address > `IO_ADDRESS_HIGH)) begin
+				if (bank_num == 0) begin
+					data_memory_bank_0[address_after_offset]			<= write_data_delay_1[7:0];
+					data_memory_bank_1[address_after_offset]			<= write_data_delay_1[15:8];
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end else if (bank_num == 1) begin
+					data_memory_bank_1[address_after_offset]			<= write_data_delay_1[7:0];
+					data_memory_bank_2[address_after_offset]			<= write_data_delay_1[15:8];
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end else if (bank_num == 2) begin
+					data_memory_bank_2[address_after_offset]			<= write_data_delay_1[7:0];
+					data_memory_bank_3[address_after_offset]			<= write_data_delay_1[15:8];
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end else begin
+					read_byte_bank_0 <= 8'bx;
+					read_byte_bank_1 <= 8'bx;
+					read_byte_bank_2 <= 8'bx;
+					read_byte_bank_3 <= 8'bx;
+				end
+		end else if (write_en_delay_2 && xfer_size_delay_2 == XFER_WORD
+			&& (address < `IO_ADDRESS_LOW || address > `IO_ADDRESS_HIGH)) begin
+				data_memory_bank_0[address_after_offset]			<= write_data_delay_1[7:0];
+				data_memory_bank_1[address_after_offset]			<= write_data_delay_1[15:8];
+				data_memory_bank_2[address_after_offset]			<= write_data_delay_1[23:16];
+				data_memory_bank_3[address_after_offset]  			<= write_data_delay_1[31:24];
+				read_byte_bank_0 <= 8'bx;
+				read_byte_bank_1 <= 8'bx;
+				read_byte_bank_2 <= 8'bx;
+				read_byte_bank_3 <= 8'bx;
+		end else begin
+			read_byte_bank_0 <= 8'bx;
+			read_byte_bank_1 <= 8'bx;
+			read_byte_bank_2 <= 8'bx;
+			read_byte_bank_3 <= 8'bx;
+		end
+	end
+
+
+	logic [`WORD_SIZE - 1:0] bank_num_delayed;
+	always_ff@(posedge clk) begin
+		bank_num_delayed <= bank_num;
+	end
+
+	always_comb begin
+		if (read_en_delay_3 && xfer_size_delay_3 == XFER_BYTE
+			&& (address_delay < `IO_ADDRESS_LOW || address_delay > `IO_ADDRESS_HIGH) && is_signed_delay_3) begin
+				if (bank_num_delayed == 0) read_data = 32'($signed(read_byte_bank_0));
+				else if (bank_num_delayed == 1) read_data = 32'($signed(read_byte_bank_1));
+				else if (bank_num_delayed == 2) read_data = 32'($signed(read_byte_bank_2));
+				else if (bank_num_delayed == 3) read_data = 32'($signed(read_byte_bank_3));
+				else read_data = 32'bx;
+		end else if (read_en_delay_3 && xfer_size_delay_3 == XFER_BYTE
+			&& (address_delay < `IO_ADDRESS_LOW || address_delay > `IO_ADDRESS_HIGH) && ~is_signed_delay_3) begin
+				if (bank_num_delayed == 0) read_data = 32'(read_byte_bank_0);
+				else if (bank_num_delayed == 1) read_data = 32'(read_byte_bank_1);
+				else if (bank_num_delayed == 2) read_data = 32'(read_byte_bank_2);
+				else if (bank_num_delayed == 3) read_data = 32'(read_byte_bank_3);
+				else read_data = 32'bx;
+		end else if (read_en_delay_3 && xfer_size_delay_3 == XFER_HALF
+			&& (address_delay < `IO_ADDRESS_LOW ||  address_delay > `IO_ADDRESS_HIGH) && is_signed_delay_3) begin
+				if (bank_num_delayed == 0) begin
+					read_data = 32'($signed({read_byte_bank_1, read_byte_bank_0})); 
+				end else if (bank_num_delayed == 1) begin
+					read_data = 32'($signed({read_byte_bank_2, read_byte_bank_1})); 
+				end else if (bank_num_delayed == 2) begin
+					read_data = 32'($signed({read_byte_bank_3, read_byte_bank_2}));
+				end else begin
+					read_data = 32'bx;
+				end
+		end else if (read_en_delay_3 && xfer_size_delay_3 == XFER_HALF
+			&& (address_delay < `IO_ADDRESS_LOW ||  address_delay > `IO_ADDRESS_HIGH) && ~is_signed_delay_3) begin
+				if (bank_num_delayed == 0) begin
+					read_data = 32'({read_byte_bank_1, read_byte_bank_0}); 
+				end else if (bank_num_delayed == 1) begin
+					read_data = 32'({read_byte_bank_2, read_byte_bank_1}); 
+				end else if (bank_num_delayed == 2) begin
+					read_data = 32'({read_byte_bank_3, read_byte_bank_2});
+				end else begin
+					read_data = 32'bx;
+				end
+		end else if (read_en_delay_3 && xfer_size_delay_3 == XFER_WORD
+			&& (address_delay < `IO_ADDRESS_LOW ||  address_delay > `IO_ADDRESS_HIGH)) begin 
+				read_data						= {read_byte_bank_3, 
+													read_byte_bank_2, 
+													read_byte_bank_1, 
+													read_byte_bank_0};
+		end else begin
+			read_data = 32'bx;
 		end 
 	end 
 

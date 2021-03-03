@@ -20,6 +20,7 @@ module top();
 	logic clk, reset;
 
 `ifndef TESTING
+	assign spi_cs = 1'b1;
 	assign reset = ~gpio_2;
 	/* verilator lint_off PINMISSING */
 	SB_HFOSC u_SB_HFOSC(.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(clk));
