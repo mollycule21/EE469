@@ -8,10 +8,10 @@
 `define IO_ADDRESS_HIGH		32'h0002ffff
 `define IO_ADDRESS_LOW		32'h0002fff0
 `define TESTING
-`define DATA_FILE_0			"./assets/data0_extended.hex"
-`define DATA_FILE_1			"./assets/data1_extended.hex"
-`define DATA_FILE_2			"./assets/data2_extended.hex"
-`define DATA_FILE_3			"./assets/data3_extended.hex"
+`define DATA_FILE_0			"../assets/data0_extended.hex"
+`define DATA_FILE_1			"../assets/data1_extended.hex"
+`define DATA_FILE_2			"../assets/data2_extended.hex"
+`define DATA_FILE_3			"../assets/data3_extended.hex"
 
 // for store operations:
 // data is from rs2, so write data should be connected to rs2
@@ -20,7 +20,7 @@
 // 0x0000 8000 - 0x0000 ffff is for initialized data
 // 0x0001 0000 - 0x0001 7fff is for stack (and i guess heap)
 // 0x0002 fff0 - 0x0002 ffff is for io operations
-module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en, write_data, read_data, serial_txd);
+module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en, write_data, read_data, HEX_out, io_flag);
 	`include "constants.svh"
 	
 	input logic clk, reset;
@@ -30,7 +30,8 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 	input logic [1:0]xfer_size;
 	input logic [`WORD_SIZE - 1:0]write_data;
 	output logic [`WORD_SIZE - 1:0]read_data;
-	output logic serial_txd;
+	output logic [7:0] HEX_out;
+	output logic io_flag; 
 
 	// address offset
 	localparam offset = 32'h8000;
@@ -84,65 +85,21 @@ module data_memory(clk, reset, read_en, is_signed, address, xfer_size, write_en,
 		$readmemh(`DATA_FILE_3, data_memory_bank_3);
 	end
 	
-	// serial transmitter for io operations
-	logic [7:0]serial_tx_data;
-	logic tx_data_available, serial_tx_ready;
-`ifndef TESTING
-	serial_transmitter serial_out(.clock(clk), .reset(reset), .tx_data(serial_tx_data), 
-									.tx_data_available(tx_data_available), 
-									.tx_ready(serial_tx_ready),
-									.serial_tx(serial_txd));
-`endif	
 	always_ff@(posedge clk) begin
 		if (reset) begin
-			serial_tx_data <= 8'bx;
-			tx_data_available <= 1'b0;
+			HEX_out <= 8'dx;
+			io_flag <= 1'b0; 
 		end else if (write_en_delay_2 && (address >= `IO_ADDRESS_LOW) 
 										&& (address <= `IO_ADDRESS_HIGH)) begin
-`ifdef TESTING
+
 			$write("I/O: %02h\n", write_data_delay_1[7:0]);
-`else
-			tx_data_available 	<= 1'b1;
-			serial_tx_data 		<= write_data_delay_1[7:0];
-`endif
+			HEX_out <= write_data_delay_1[7:0];
+			io_flag <= 1'b1;
 		end else begin
-			serial_tx_data <= 8'bx;
-			tx_data_available <= 1'b0;
+			HEX_out <= 8'dx;
+			io_flag <= 1'b0; 
 		end
 	end
-//`ifndef TESTING
-//    // Serial transmitter
-//    logic [7:0] serial_tx_data;
-//    logic serial_tx_data_available, serial_tx_ready;
-//    serial_transmitter serial_out (
-//      .clock                (clk),
-//      .reset                (reset),
-//      .tx_data              (serial_tx_data),
-//      .tx_data_available    (serial_tx_data_available),
-//      .tx_ready             (serial_tx_ready),
-//      .serial_tx            (serial_txd)
-//    );
-//
-//    // Dummy data to demonstrate serial transmission
-//    logic last_serial_tx_ready;
-//    assign serial_tx_data_available = write_en_delay_2
-//									& (address >= `IO_ADDRESS_LOW)
-//									& (address <= `IO_ADDRESS_HIGH);
-//
-//    always_ff @(posedge clk) begin
-//      if (reset) begin
-//        last_serial_tx_ready <= 1'b0;
-//      end else if (serial_tx_ready && !last_serial_tx_ready) begin
-//		serial_tx_data <= write_data_delay_1[7:0];
-//        last_serial_tx_ready <= serial_tx_ready;
-//      end else begin
-//        last_serial_tx_ready <= serial_tx_ready;
-//      end
-//    end
-//`endif
-
-
-
 
 	logic [31:0] bank_num;
 	assign bank_num = (address - offset) % 4;
@@ -358,3 +315,4 @@ endmodule
 //	
 //	
 //endmodule
+
