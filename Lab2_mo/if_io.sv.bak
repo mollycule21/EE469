@@ -1,9 +1,0 @@
-
-
-module if_io (input logic instruction,  
-						output logic yes_branch, yes_jump);
-						
-						
-						
-endmodule 
-			
