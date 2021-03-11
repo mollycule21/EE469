@@ -1,0 +1,67 @@
+module id_ex 
+
+    output logic [63:0] ALUInputA, ALUSrcOut, RFEX_Db, brTargetAddr;
+    output logic [31:0] RFEX_instruction;
+    output logic [4:0] RF_Ab; // Reg2Loc mux output - Ab from regfile
+    output logic [3:0] EX_xfer_size;  // control logic output
+    output logic [2:0] EX_ALUOp;  // control logic output
+    output logic EX_MemToReg, EX_RegWrite, EX_MemWrite, EX_read_en,
+                 EX_movz, EX_movk, EX_setFlag, EX_isLDURB;  // control logic output
+    output logic accelZero;
+	 
+	 
+	 input  logic [31:0] if_io_pc; // PC from IFETCH
+    input  logic [31:0] if_io_instruction; // instruction from IFETCH
+	 
+	 
+	 input  logic [63:0] ExForward, MemForward, WB_WriteData;
+    input  logic [4:0] WB_Rd;
+    input  logic [3:0] RF_xfer_size;  // control logic input
+    input  logic [2:0] RF_ALUOp;  // control logic input
+    input  logic [1:0] forwardA, forwardB;
+    input  logic Reg2Loc, UncondBr, addi, ALUSrc, RF_MemToReg, RF_RegWrite, RF_MemWrite, RF_read_en,
+                 RF_movz, RF_movk, RF_setFlag, RF_isLDURB;  // control logic input
+    input  logic WB_RegWrite; /////////////////////////////// TODO: verify if it's MEM_RegWrite or WB_RegWrite
+    input  logic reset, clk;
+	 
+	 logic [63:0] regfile_Da, regfile_Db, imm12_64Bit, imm9_64Bit,
+                    addiOut, forwardAMuxOut, forwardBMuxOut, ALUSrcMuxOut;
+    logic [4:0] IFRF_Rd, IFRF_Rn, IFRF_Rm;
+    
+	// register file
+	// input:	clk, reset, read_reg_1, read_reg_2, wr_reg, wr_data, wr_en
+	// output:	read_out_1, read_out_2
+	register_file reg_file(.clk(clk), .reset(reset),
+							.read_reg_1(rs1), .read_reg_2(rs2), .wr_reg(rd),
+							.alu_wr_data(alu_output), .mem_wr_data(data_mem_output), 
+							.wr_en(reg_write), .read_out_1(reg_out_1), .read_out_2(reg_out_2));
+							
+							
+    /// REG/DEC|EX pipes ///
+    register #(.WIDTH(64)) alu_reg (.q(ALUInputA), .d(forwardAMuxOut), .reset, .clk);
+    register #(.WIDTH(64)) DbReg(.q(RFEX_Db), .d(forwardBMuxOut), .reset, .clk);
+	 register #(.WIDTH(64)) ALUSrcMuxOutReg(.q(ALUSrcOut), .d(ALUSrcMuxOut), .reset, .clk);
+   
+    register #(.WIDTH(32)) instructionReg(.q(RFEX_instruction), .d(IFRF_instruction), .reset, .clk);
+    register #(.WIDTH(15)) controlReg(.q({EX_MemToReg,
+                                            EX_RegWrite,
+                                            EX_MemWrite,
+                                            EX_read_en,
+                                            EX_movz,
+                                            EX_movk,
+                                            EX_setFlag,
+                                            EX_isLDURB,
+                                            EX_ALUOp,
+                                            EX_xfer_size}),
+                                      .d({RF_MemToReg,
+                                            RF_RegWrite,
+                                            RF_MemWrite,
+                                            RF_read_en,
+                                            RF_movz,
+                                            RF_movk,
+                                            RF_setFlag,
+                                            RF_isLDURB,
+                                            RF_ALUOp,
+                                            RF_xfer_size}), .reset, .clk);
+endmodule
+endmodule 

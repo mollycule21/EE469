@@ -1,0 +1,405 @@
+# Reading C:/intelFPGA_lite/17.0/modelsim_ase/tcl/vsim/pref.tcl
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 12:09:32 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work forwarding.sv 
+# -- Compiling module forwarding
+# -- Compiling module forwarding_tb
+# 
+# Top level modules:
+# 	forwarding_tb
+# End time: 12:09:32 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim -voptargs=""+acc"" -t 1ps -lib work forwarding_tb 
+# Start time: 12:09:33 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.forwarding_tb
+# Loading work.forwarding
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Error: Cannot open macro file: forwarding_wave.do
+# Error in macro ./runlab.do line 79
+# Cannot open macro file: forwarding_wave.do
+#     while executing
+# "do forwarding_wave.do"
+add wave -position end  sim:/forwarding_tb/DELAY
+add wave -position end  sim:/forwarding_tb/forwardA
+add wave -position end  sim:/forwarding_tb/forwardB
+add wave -position end  sim:/forwarding_tb/EX_Reg_Write
+add wave -position end  sim:/forwarding_tb/MEM_Reg_Write
+add wave -position end  sim:/forwarding_tb/WB_Reg_Write
+add wave -position end  sim:/forwarding_tb/EX_Rd
+add wave -position end  sim:/forwarding_tb/MEM_Rd
+add wave -position end  sim:/forwarding_tb/WB_Rd
+add wave -position end  sim:/forwarding_tb/rs1
+add wave -position end  sim:/forwarding_tb/rs2
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlftr221dr".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftr221dr
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/mollyle/EE469/Lab2/forwarding_wave.do
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 12:09:51 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work forwarding.sv 
+# -- Compiling module forwarding
+# -- Compiling module forwarding_tb
+# 
+# Top level modules:
+# 	forwarding_tb
+# End time: 12:09:51 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 12:09:52 on Mar 10,2021, Elapsed time: 0:00:19
+# Errors: 3, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work forwarding_tb 
+# Start time: 12:09:52 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.forwarding_tb
+# Loading work.forwarding
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlfte10yjz".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlfte10yjz
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 12:11:29 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work forwarding.sv 
+# -- Compiling module forwarding
+# -- Compiling module forwarding_tb
+# 
+# Top level modules:
+# 	forwarding_tb
+# End time: 12:11:29 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 12:11:30 on Mar 10,2021, Elapsed time: 0:01:38
+# Errors: 0, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work forwarding_tb 
+# Start time: 12:11:30 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.forwarding_tb
+# Loading work.forwarding
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlft0fwv22".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlft0fwv22
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:15:21 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# ** Error: id_ex.sv(16): (vlog-2730) Undefined variable: 'fowardA'.
+# ** Error: id_ex.sv(21): (vlog-2730) Undefined variable: 'RF_out1'.
+# ** Error: id_ex.sv(23): (vlog-2730) Undefined variable: 'RF_out1'.
+# ** Error: id_ex.sv(26): (vlog-2730) Undefined variable: 'fowardB'.
+# ** Error (suppressible): id_ex.sv(38): (vlog-2388) 'id_ex_pc' already declared in this scope (id_ex).
+# ** Error (suppressible): id_ex.sv(38): (vlog-2388) 'id_ex_instruction' already declared in this scope (id_ex).
+# ** Error (suppressible): id_ex.sv(38): (vlog-2388) 'EX_out_1' already declared in this scope (id_ex).
+# ** Error (suppressible): id_ex.sv(38): (vlog-2388) 'EX_out_2' already declared in this scope (id_ex).
+# ** Error: id_ex.sv(44): (vlog-2730) Undefined variable: 'EX_Rd'.
+# -- Compiling module id_ex_tb
+# End time: 13:15:21 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 9, Warnings: 0
+# ** Error: C:/intelFPGA_lite/17.0/modelsim_ase/win32aloem/vlog failed.
+# Error in macro ./runlab.do line 34
+# C:/intelFPGA_lite/17.0/modelsim_ase/win32aloem/vlog failed.
+#     while executing
+# "vlog -sv -work work "id_ex.sv""
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:16:29 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# ** Error (suppressible): id_ex.sv(38): (vlog-2388) 'id_ex_pc' already declared in this scope (id_ex).
+# ** Error (suppressible): id_ex.sv(38): (vlog-2388) 'id_ex_instruction' already declared in this scope (id_ex).
+# ** Error (suppressible): id_ex.sv(38): (vlog-2388) 'EX_out_1' already declared in this scope (id_ex).
+# ** Error (suppressible): id_ex.sv(38): (vlog-2388) 'EX_out_2' already declared in this scope (id_ex).
+# -- Compiling module id_ex_tb
+# End time: 13:16:29 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 4, Warnings: 0
+# ** Error: C:/intelFPGA_lite/17.0/modelsim_ase/win32aloem/vlog failed.
+# Error in macro ./runlab.do line 34
+# C:/intelFPGA_lite/17.0/modelsim_ase/win32aloem/vlog failed.
+#     while executing
+# "vlog -sv -work work "id_ex.sv""
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:16:59 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# -- Compiling module id_ex_tb
+# 
+# Top level modules:
+# 	id_ex_tb
+# End time: 13:16:59 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 13:17:00 on Mar 10,2021, Elapsed time: 1:05:30
+# Errors: 11, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work id_ex_tb 
+# Start time: 13:17:00 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.id_ex_tb
+# Loading work.id_ex
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Error: Cannot open macro file: id_ex_wave.do
+# Error in macro ./runlab.do line 80
+# Cannot open macro file: id_ex_wave.do
+#     while executing
+# "do id_ex_wave.do"
+add wave -position end  sim:/id_ex_tb/RF_out_1
+add wave -position end  sim:/id_ex_tb/RF_out_2
+add wave -position end  sim:/id_ex_tb/EX_Rd
+add wave -position end  sim:/id_ex_tb/id_ex_pc
+add wave -position end  sim:/id_ex_tb/id_ex_instruction
+add wave -position end  sim:/id_ex_tb/EX_out_1
+add wave -position end  sim:/id_ex_tb/EX_out_2
+add wave -position end  sim:/id_ex_tb/forwardA
+add wave -position end  sim:/id_ex_tb/forwardB
+add wave -position end  sim:/id_ex_tb/read_out_1
+add wave -position end  sim:/id_ex_tb/read_out_2
+add wave -position end  sim:/id_ex_tb/alu_out
+add wave -position end  sim:/id_ex_tb/mem_read_out
+add wave -position end  sim:/id_ex_tb/wb_data_out
+add wave -position end  sim:/id_ex_tb/if_id_pc
+add wave -position end  sim:/id_ex_tb/if_id_instruction
+add wave -position end  sim:/id_ex_tb/rd
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlft6gahie".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlft6gahie
+add wave -position 0  sim:/id_ex_tb/clk
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/mollyle/EE469/Lab2/id_ex_wave.do
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:17:39 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# -- Compiling module id_ex_tb
+# 
+# Top level modules:
+# 	id_ex_tb
+# End time: 13:17:39 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 13:17:40 on Mar 10,2021, Elapsed time: 0:00:40
+# Errors: 3, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work id_ex_tb 
+# Start time: 13:17:41 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.id_ex_tb
+# Loading work.id_ex
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlftk43zgm".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftk43zgm
+# ** Note: $stop    : id_ex.sv(100)
+#    Time: 400 ps  Iteration: 1  Instance: /id_ex_tb
+# Break in Module id_ex_tb at id_ex.sv line 100
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:20:31 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# -- Compiling module id_ex_tb
+# 
+# Top level modules:
+# 	id_ex_tb
+# End time: 13:20:31 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 13:20:32 on Mar 10,2021, Elapsed time: 0:02:51
+# Errors: 0, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work id_ex_tb 
+# Start time: 13:20:32 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.id_ex_tb
+# Loading work.id_ex
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlftsebewk".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftsebewk
+# ** Note: $stop    : id_ex.sv(100)
+#    Time: 1300 ps  Iteration: 1  Instance: /id_ex_tb
+# Break in Module id_ex_tb at id_ex.sv line 100
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/mollyle/EE469/Lab2/id_ex_wave.do
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/mollyle/EE469/Lab2/id_ex_wave.do
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:29:09 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# -- Compiling module id_ex_tb
+# 
+# Top level modules:
+# 	id_ex_tb
+# End time: 13:29:09 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 13:29:11 on Mar 10,2021, Elapsed time: 0:08:39
+# Errors: 0, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work id_ex_tb 
+# Start time: 13:29:11 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.id_ex_tb
+# Loading work.id_ex
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlft538vsm".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlft538vsm
+# ** Note: $stop    : id_ex.sv(100)
+#    Time: 1300 ps  Iteration: 1  Instance: /id_ex_tb
+# Break in Module id_ex_tb at id_ex.sv line 100
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:30:17 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# -- Compiling module id_ex_tb
+# 
+# Top level modules:
+# 	id_ex_tb
+# End time: 13:30:17 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 13:30:18 on Mar 10,2021, Elapsed time: 0:01:07
+# Errors: 0, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work id_ex_tb 
+# Start time: 13:30:19 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.id_ex_tb
+# Loading work.id_ex
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlft8v1g25".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlft8v1g25
+# ** Note: $stop    : id_ex.sv(103)
+#    Time: 1400 ps  Iteration: 1  Instance: /id_ex_tb
+# Break in Module id_ex_tb at id_ex.sv line 103
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/mollyle/EE469/Lab2/id_ex_wave.do
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:32:31 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# -- Compiling module id_ex_tb
+# 
+# Top level modules:
+# 	id_ex_tb
+# End time: 13:32:32 on Mar 10,2021, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# End time: 13:32:33 on Mar 10,2021, Elapsed time: 0:02:14
+# Errors: 0, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work id_ex_tb 
+# Start time: 13:32:33 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.id_ex_tb
+# Loading work.id_ex
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlftx2e7tw".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftx2e7tw
+# ** Note: $stop    : id_ex.sv(103)
+#    Time: 1 ns  Iteration: 1  Instance: /id_ex_tb
+# Break in Module id_ex_tb at id_ex.sv line 103
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:33:31 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# -- Compiling module id_ex_tb
+# 
+# Top level modules:
+# 	id_ex_tb
+# End time: 13:33:31 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 13:33:32 on Mar 10,2021, Elapsed time: 0:00:59
+# Errors: 0, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work id_ex_tb 
+# Start time: 13:33:32 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.id_ex_tb
+# Loading work.id_ex
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlftd2ian5".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftd2ian5
+# ** Note: $stop    : id_ex.sv(100)
+#    Time: 800 ps  Iteration: 1  Instance: /id_ex_tb
+# Break in Module id_ex_tb at id_ex.sv line 100
+do runlab.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:34:49 on Mar 10,2021
+# vlog -reportprogress 300 -sv -work work id_ex.sv 
+# -- Compiling module id_ex
+# -- Compiling module id_ex_tb
+# 
+# Top level modules:
+# 	id_ex_tb
+# End time: 13:34:49 on Mar 10,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# End time: 13:34:50 on Mar 10,2021, Elapsed time: 0:01:18
+# Errors: 0, Warnings: 2
+# vsim -voptargs=""+acc"" -t 1ps -lib work id_ex_tb 
+# Start time: 13:34:50 on Mar 10,2021
+# Loading sv_std.std
+# Loading work.id_ex_tb
+# Loading work.id_ex
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: mollyle  Hostname: DESKTOP-A23UBM3  ProcessID: 3472
+#           Attempting to use alternate WLF file "./wlftqv7egf".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftqv7egf
+# ** Note: $stop    : id_ex.sv(100)
+#    Time: 1400 ps  Iteration: 1  Instance: /id_ex_tb
+# Break in Module id_ex_tb at id_ex.sv line 100
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/mollyle/EE469/Lab2/id_ex_wave.do
+# End time: 13:59:32 on Mar 10,2021, Elapsed time: 0:24:42
+# Errors: 0, Warnings: 2
