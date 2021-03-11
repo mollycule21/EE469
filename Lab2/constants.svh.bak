@@ -109,18 +109,8 @@ localparam [1:0]REG_WR_OFF  = 2'b00;
 localparam [1:0]REG_WR_ALU  = 2'b01;
 localparam [1:0]REG_WR_MEM  = 2'b10;
 
-// struct 
-
 typedef struct {
-	logic [6:0] opcode;
-	logic [4:0] rd; 
-	logic mem_read, mem_write; 
-	logic [1:0]reg_write; 						
-	logic data_mem_signed;
-	logic control_branch, jalr_branch;
-	logic [4:0] alu_signal;					
-	logic [1:0] imm_en; 						
-	logic [11:0]imm; 				
-	logic [19:0] imm_U_J;				
-	logic [1:0] xfer_size;
-} control_outputs;
+rd, mem_read, mem_write, reg_write, data_mem_signed, 
+control_branch, jalr_branch, alu_signal, 
+imm_en, imm, imm_U_J, xfer_size
+} control_outputs; 

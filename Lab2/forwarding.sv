@@ -63,3 +63,10 @@ module forwarding_tb();
 endmodule 
 
 
+
+// delay slots 
+
+// lw R5 6 
+// R4 = R5 + 1 
+
+

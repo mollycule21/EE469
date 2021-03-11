@@ -2,23 +2,27 @@
 `define WORD_SIZE	32
 
 // TODO: fix inputs on the testbench
-module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_signed, 
-						control_branch, jalr_branch, alu_signal, 
-						rs1, rs2, rd, imm, imm_U_J, imm_en, xfer_size);
+
+//module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_signed, 
+//						control_branch, jalr_branch, alu_signal, 
+//						rs1, rs2, rd, imm, imm_U_J, imm_en, xfer_size);
+
+module control_signal(dec_control_outputs, instruction); 
 	
 	`include "constants.svh"
-
+	output control_outputs dec_control_outputs;  
 	input logic [`WORD_SIZE - 1 : 0] instruction; 
-	output logic mem_read, mem_write; 
-	output logic [1:0]reg_write; 						// if need to write to memory or register
-	output logic data_mem_signed;
-	output logic control_branch, jalr_branch;			// true if the instruction contains branch
-	output logic [4:0]alu_signal;						// control signal for alu
-	output logic [4:0]rs1, rs2, rd;	
-	output logic [1:0] imm_en; 							// 00 = rs2, 01 = imm, 10 = imm_U_J
-	output logic [11:0]imm; 							// immediate value for I, S, B type
-	output logic [19:0] imm_U_J;						// immediate value for U-type and J-type
-	output logic [1:0] xfer_size;
+	logic mem_read, mem_write; 
+	logic [1:0]reg_write; 						// if need to write to memory or register
+	logic data_mem_signed;
+	logic control_branch, jalr_branch;			// true if the instruction contains branch
+	logic [4:0]alu_signal;						// control signal for alu
+	logic [4:0]rs1, rs2, rd;	
+	logic [1:0] imm_en; 							// 00 = rs2, 01 = imm, 10 = imm_U_J
+	logic [11:0]imm; 							// immediate value for I, S, B type
+	logic [19:0] imm_U_J;						// immediate value for U-type and J-type
+	logic [1:0] xfer_size;
+
 
 	
 	// reads the instruction and determines instruction type and opcode
@@ -265,8 +269,29 @@ module control_signal(instruction, mem_read, mem_write, reg_write, data_mem_sign
 		end
  		endcase
 	end	
+	
+	always_comb begin 
+//		dec_control_outputs.rd <=rd; 
+//		dec_control_outputs.mem_read <= mem_read;  
+//		dec_control_outputs.mem_write <= mem_write;
+//		dec_control_outputs.reg_write <= reg_write;					
+//		dec_control_outputs.data_mem_signed <= data_mem_signed;
+//		dec_control_outputs.control_branch <= control_branch; 
+//		dec_control_outputs.jalr_branch <= jalr_branch;		
+//		dec_control_outputs.alu_signal <= alu_signal;						
+//		dec_control_outputs.imm_en <= imm_en;
+//		dec_control_outputs.imm <= imm; 
+//		dec_control_outputs.imm_U_J <= imm_U_J;
+//		dec_control_outputs.xfer_size <= xfer_size; 
 
+		dec_control_outputs = '{rd, mem_read, mem_write, reg_write, data_mem_signed, control_branch, jalr_branch, alu_signal, 
+										imm_en, imm, imm_U_J, xfer_size}; 
+										
+	end 
+	
 endmodule
+
+
 
 
 

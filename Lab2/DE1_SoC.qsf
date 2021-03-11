@@ -290,7 +290,6 @@ set_location_assignment PIN_D11 -to VGA_VS
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
-set_global_assignment -name SDC_FILE DE1_SOC_golden_top.sdc
 set_global_assignment -name BOARD "DE1-SoC Board"
 set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (SystemVerilog)"
 set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
@@ -298,23 +297,6 @@ set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "SYSTEMVERILOG HDL" -section_
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name STATE_MACHINE_PROCESSING "USER-ENCODED"
-set_global_assignment -name SYSTEMVERILOG_FILE alu.sv
-set_global_assignment -name SYSTEMVERILOG_FILE branch_adder.sv
-set_global_assignment -name SYSTEMVERILOG_FILE control_signal.sv
-set_global_assignment -name SYSTEMVERILOG_FILE data_memory.sv
-set_global_assignment -name VERILOG_FILE DE1_SOC_golden_top.v
-set_global_assignment -name SYSTEMVERILOG_FILE instruction_memory.sv
-set_global_assignment -name SYSTEMVERILOG_FILE instruction_type.sv
-set_global_assignment -name SYSTEMVERILOG_FILE jalr_adder.sv
-set_global_assignment -name SYSTEMVERILOG_FILE pc.sv
-set_global_assignment -name SYSTEMVERILOG_FILE pc_adder.sv
-set_global_assignment -name SYSTEMVERILOG_FILE pc_in_out.sv
-set_global_assignment -name SYSTEMVERILOG_FILE pc_mux.sv
-set_global_assignment -name SYSTEMVERILOG_FILE pc_top_level.sv
-set_global_assignment -name SYSTEMVERILOG_FILE pc_top_level_tb.sv
-set_global_assignment -name SYSTEMVERILOG_FILE register_file.sv
-set_global_assignment -name SYSTEMVERILOG_FILE serial_transmitter.sv
-set_global_assignment -name SYSTEMVERILOG_FILE top.sv
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
@@ -686,12 +668,32 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[6]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[7]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_SYNC_N
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_VS
+set_global_assignment -name SOURCE_FILE constants.svh
+set_global_assignment -name SDC_FILE DE1_SOC_golden_top.sdc
+set_global_assignment -name SYSTEMVERILOG_FILE alu.sv
+set_global_assignment -name SYSTEMVERILOG_FILE branch_adder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE control_signal.sv
+set_global_assignment -name SYSTEMVERILOG_FILE data_memory.sv
+set_global_assignment -name VERILOG_FILE DE1_SOC_golden_top.v
+set_global_assignment -name SYSTEMVERILOG_FILE instruction_memory.sv
+set_global_assignment -name SYSTEMVERILOG_FILE instruction_type.sv
+set_global_assignment -name SYSTEMVERILOG_FILE jalr_adder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE pc.sv
+set_global_assignment -name SYSTEMVERILOG_FILE pc_adder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE pc_in_out.sv
+set_global_assignment -name SYSTEMVERILOG_FILE pc_mux.sv
+set_global_assignment -name SYSTEMVERILOG_FILE pc_top_level.sv
+set_global_assignment -name SYSTEMVERILOG_FILE pc_top_level_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE register_file.sv
+set_global_assignment -name SYSTEMVERILOG_FILE serial_transmitter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE top.sv
 set_global_assignment -name SYSTEMVERILOG_FILE display.sv
 set_global_assignment -name SYSTEMVERILOG_FILE clock_divider.sv
 set_global_assignment -name SYSTEMVERILOG_FILE fsm.sv
 set_global_assignment -name SYSTEMVERILOG_FILE forwarding.sv
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name SYSTEMVERILOG_FILE ex_mem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE id_ex.sv
 set_global_assignment -name SYSTEMVERILOG_FILE if_id.sv
 set_global_assignment -name SYSTEMVERILOG_FILE mem_wb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE wb.sv
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
