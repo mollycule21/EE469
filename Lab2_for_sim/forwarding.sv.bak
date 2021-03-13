@@ -1,0 +1,55 @@
+`timescale 1ps/10fs
+
+// 2 forwarding logics bc the there are 2 source regsiters from the instruction going into the register file 
+// Forwarding happens from 3 stages:EX, MEM, WB
+// Checked for forwarding at decoder stage 
+
+
+module forwarding(forwardA, forwardB, EX_RegWrite, MEM_RegWrite,
+                        EX_Rd, MEM_Rd, rs1, rs2);
+   
+	output logic [1:0] forwardA, forwardB;
+	input  logic EX_RegWrite, MEM_RegWrite, WB_RegWrite;
+	input  logic [4:0] EX_Rd, MEM_Rd, WB_Rd, rs1, rs2;
+ 
+	// output logic forwardFlag;
+	// input  logic [10:0] opcode;
+	//	EX_setFlag;
+	 
+
+// foward data from execute, mem, and write back 
+	always_comb begin
+		  // forwardA logic 
+        // EX hazard 
+		  if ((EX_Rd != 5'd0) && EX_RegWrite && (EX_Rd == rs1))
+            forwardA = 2'b01;
+        // MEM hazard
+		  else if ((MEM_Rd != 5'd0) && MEM_RegWrite && (MEM_rd == rs1))
+            forwardA = 2'b10;
+		  else if ((WB_rd ! = 5'd0) && WB_RegWrite && (WB_rd == rs1)) 
+				forwardA = 11; 
+		  // no hazard, proceed with current cycle data
+        else
+            forwardA = 2'b00;
+        /// forwardB logic ///
+        // EX hazard 
+        if ((EX_Rd != 5'd0) && EX_RegWrite && (EX_Rd == rs2))
+            forwardB = 2'b01;
+        // MEM hazard
+		  else if ((MEM_Rd != 5'd0) && MEM_RegWrite && (MEM_rd == rs2))
+            forwardB = 2'b10;
+		  else if ((WB_rd ! = 5'd0) && WB_RegWrite && (WB_rd == rs2)) 
+				forwardB = 11; 
+		  // no hazard, proceed with current cycle data
+        else
+            forwardB = 2'b00;
+    
+endmodule
+
+module forwarding_tb(); 
+	logic [1:0] forwardA, forwardB;
+	logic EX_RegWrite, MEM_RegWrite, WB_RegWrite;
+	logic [4:0] EX_Rd, MEM_Rd, WB_Rd, rs1, rs2;
+endmodule 
+
+

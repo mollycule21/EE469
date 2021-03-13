@@ -1,0 +1,67 @@
+module test_tb(); 
+	`include "constants.svh"
+
+    // struct for outputs from control_signal 
+	typedef struct packed{
+	logic [4:0] rd; 
+	logic mem_read, mem_write; 
+	logic [1:0]reg_write; 						
+	logic data_mem_signed;
+	logic control_branch, jalr_branch;
+	logic [4:0] alu_signal;					
+	logic [1:0] imm_en; 						
+	logic [11:0]imm; 				
+	logic [19:0] imm_U_J;				
+	logic [1:0] xfer_size;
+	} control_outputs;
+
+    // delcaring structs for each tage 
+	control_outputs dec_control_outputs;
+	control_outputs EX_control_outputs;
+	control_outputs MEM_control_outputs;
+	control_outputs WB_control_outputs;
+	
+	// keeping track of outputs from control_signal and passing it down a stage at each posedge clk 
+	always_ff @(posedge clk) begin
+		EX_control_outputs <= dec_control_outputs;
+		MEM_control_outputs <= EX_control_outputs;
+		WB_control_outputs<= MEM_control_outputs;
+	end
+	
+
+	logic clk, reset;  
+    logic [31:0] EX_out_1, EX_out_2; 
+    logic do_WB;
+    logic [31:0] WB_data; 
+
+    top dut (.reset(reset), .clk(clk), .do_WB(do_WB), .WB_data(WB_data), .EX_out_1(EX_out_1), .EX_out_2(EX_out_2));
+
+			 
+	output logic [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
+	output logic [9:0] LEDR;
+	input logic [3:0] KEY;
+	input logic CLOCK_50; 
+	// input logic clk; 
+	)
+
+    parameter CLOCK_PERIOD = 50;
+    initial begin
+        clk <= 0;
+        forever #(CLOCK_PERIOD/2) clk <= ~clk;
+    end
+    
+    initial begin
+        // reset is binded to KEY[3]
+        reset  <= 1'b0;    @(posedge clk);
+        reset  <= 1'b1;    @(posedge clk);
+                           @(posedge clk);
+
+        do_WB <= 1'b0; 
+        WB_data <= 32'20; 
+        EX_out_1 <= 32'd11; 
+        EX_out_2 <= 32'd12;
+                            @(posedge clk);
+                            repeat (20) @(posedge clk);
+        $stop;
+    end
+endmodule

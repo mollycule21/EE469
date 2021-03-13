@@ -1,0 +1,42 @@
+`timescale 1ps/10fs
+
+module register #(parameter WIDTH = 64) (q, d, reset, clk);
+    output logic [WIDTH-1:0] q;
+    input  logic [WIDTH-1:0] d;
+    input  logic reset, clk;
+
+    genvar i;
+
+    generate
+        for (i = 0; i < WIDTH; i++) begin
+            D_FF updateRegisters(.q(q[i]), .d(d[i]), .reset, .clk);
+        end
+    endgenerate
+
+endmodule
+
+module register_testbench();
+    logic [63:0] q;
+    logic [63:0] d;
+    logic reset, clk;
+
+    parameter ClockDelay = 10000;
+    initial begin // Set up the clock
+		clk <= 0;
+		forever #(ClockDelay/2) clk <= ~clk;
+	end
+
+    register dut(.q, .d, .reset, .clk);
+
+    initial begin
+                                 @(posedge clk);
+        reset <= 1; d <= 64'd2;  @(posedge clk);
+                                 @(posedge clk);
+                    d <= 64'd8;  @(posedge clk);
+                                 @(posedge clk);
+                    d <= 64'd64; @(posedge clk);
+                                 @(posedge clk);
+                                 @(posedge clk);
+        $stop;
+    end
+endmodule
